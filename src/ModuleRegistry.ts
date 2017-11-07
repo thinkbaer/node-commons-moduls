@@ -11,6 +11,8 @@ export interface IModuleOptions {
     paths: string[]
 
     depth?: number
+
+    module: NodeModule
 }
 
 
@@ -62,7 +64,7 @@ export class ModuleRegistry {
 
     async _scan_module_path(node_modules_dir: string): Promise<Module[]> {
         let options: INpmlsOptions = {
-            filter: this.options.filter,
+            filter: this.options.packageFilter,
             depth: this.options.depth
         };
 
@@ -89,7 +91,7 @@ export class ModuleRegistry {
         }
 
         this.registry.sort((a: Module, b: Module) => {
-            return b.child_modules.length - a.child_modules.length;
+            return a.child_modules.length - b.child_modules.length;
         });
 
         for (let first of this.registry) {
@@ -113,7 +115,7 @@ export class ModuleRegistry {
         }
 
         this.registry.sort((a, b) => {
-            return b.weight - a.weight
+            return a.weight - b.weight
         });
 
         return this.registry
@@ -124,15 +126,17 @@ export class ModuleRegistry {
         let split = modul.path.split(path.sep);
         split.pop();
 
-        // TODO Whats that?
+        // necassary to extend the search directories of require
         let new_node_modules_dir = split.join(path.sep);
-        if (this.paths.indexOf(new_node_modules_dir) == -1) {
-            this.paths.unshift(new_node_modules_dir)
+        if (this.options.module['paths'].indexOf(new_node_modules_dir) == -1) {
+            this.options.module['paths'].unshift(new_node_modules_dir)
         }
 
         // TODO to analyse or integrate modul content/additions it should be given more options then "require",
         // for example a declarative version with file config like "module.json"
-        let handle = modul.internal ? require(modul.path) : require(modul.name);
+        // let handle = modul.internal ? require(modul.getMain()) : require(modul.name);
+        // let handle = modul.internal ? require(modul.path) : require(modul.name);
+        let handle = this.options.module.require(modul.name);
         modul.handle = handle;
 
         if (handle.exposesHooks) {
@@ -171,6 +175,7 @@ export class ModuleRegistry {
             return ModuleRegistry.handleCall.apply(null, _args)
         }));
     }
+
 
     static async handleCall(): Promise<any> {
         let args = Array.prototype.slice.call(arguments);

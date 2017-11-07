@@ -15,7 +15,8 @@ class ModulesSpec {
         let registry = new ModuleRegistry({
             paths:[
                 __dirname + '/fake_scenario/hc_fake_app/node_module_fakes'
-            ]
+            ],
+            module:module
         });
 
         let modules = await registry.rebuild_registry();
