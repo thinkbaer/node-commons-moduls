@@ -1,0 +1,22 @@
+{
+  "name": "hc_fake_app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "hc"
+  ],
+  "author": "Robert Kania",
+  "license": "MIT",
+  "dependencies": {
+    "hc-core":"1.0.0",
+    "hc_test1":"0.0.1",
+    "hc_test2":"0.0.1"
+  },
+  "devDependencies": {
+    "mocha": "^2.5.3"
+  }
+}
