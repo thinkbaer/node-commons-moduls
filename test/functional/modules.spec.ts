@@ -2,7 +2,7 @@ import {suite, test,timeout} from "mocha-typescript";
 import {assert, expect} from "chai";
 import * as fs from 'fs'
 import * as _ from 'lodash'
-import {ModuleRegistry} from "../src/ModuleRegistry";
+import {ModuleRegistry} from "../../src/ModuleRegistry";
 
 describe('', () => {});
 
