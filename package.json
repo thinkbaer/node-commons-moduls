@@ -1,6 +1,6 @@
 {
   "name": "commons-moduls",
-  "version": "0.1.2",
+  "version": "1.0.0",
   "description": "Commons-moduls handles and manages contextual moduls for complex and itegratable applications. ",
   "main": "index.js",
   "directories": {
@@ -28,12 +28,10 @@
   "homepage": "https://github.com/thinkbaer/node-commons-moduls#readme",
   "devDependencies": {
     "@types/chai": "^4.0.0",
-    "@types/deepmerge": "^1.3.1",
     "@types/lodash": "^4.14.69",
     "@types/mocha": "^2.2.38",
     "@types/multimatch": "^2.1.1",
     "@types/node": "^7.0.43",
-    "@types/object-assign": "^4.0.30",
     "chai": "^4.0.2",
     "del": "^3.0.0",
     "gulp": "^3.9.1",

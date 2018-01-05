@@ -1,5 +1,5 @@
 {
-  "name": "hc_fake_app",
+  "name": "fake_app_01",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -12,11 +12,7 @@
   "author": "Robert Kania",
   "license": "MIT",
   "dependencies": {
-    "hc-core":"1.0.0",
-    "hc_test1":"0.0.1",
-    "hc_test2":"0.0.1"
-  },
-  "devDependencies": {
-    "mocha": "^2.5.3"
+    "module1":"0.0.1",
+    "module2":"0.0.1"
   }
 }

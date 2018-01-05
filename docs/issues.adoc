@@ -1,0 +1,11 @@
+== Issues
+
+*@TASK {counter:task} 20171107* +
+Create an API for usage of different modul loading and integration methods.
+Current require of NodeModule is fixed coded. But we also want to use declarative
+definitions, without automatically loading.
+Example other loader:
+
+* RequireLoader - loads by require
+* ClassLoader - loads classes in files of a directory
+* DeclarationLoader - load definitions

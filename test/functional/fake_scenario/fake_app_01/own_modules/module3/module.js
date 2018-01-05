@@ -3,12 +3,12 @@
  */
 exports = module.exports = {
 
-    onExtend : function(HippoCore){
-        HippoCore.$hcTest2 = true
+    onExtend : function(){
+
     },
 
-    onBoot : function(HC){
-
+    onBoot : function(REF){
+      REF.modul1 = true;
     },
 
     onRoutes : function(){

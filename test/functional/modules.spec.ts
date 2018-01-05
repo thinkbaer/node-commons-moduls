@@ -1,83 +1,77 @@
-import {suite, test,timeout} from "mocha-typescript";
-import {assert, expect} from "chai";
-import * as fs from 'fs'
+import {suite, test} from "mocha-typescript";
+import {expect} from "chai";
+
 import * as _ from 'lodash'
-import {ModuleRegistry} from "../../src/ModuleRegistry";
+import {ModuleRegistry} from "../../src/registry/ModuleRegistry";
 
-describe('', () => {});
 
-@suite('modul ')
+@suite('modul registry')
 class ModulesSpec {
 
-    @test.only @timeout(10000)
-    async 'find modules'() {
+  @test
+  async 'find modules in node_modules directory of application path'() {
 
-        let registry = new ModuleRegistry({
-            paths:[
-                __dirname + '/fake_scenario/hc_fake_app/node_module_fakes'
-            ],
-            module:module
-        });
+    let registry = new ModuleRegistry({
+      paths: [
+        __dirname + '/fake_scenario/fake_app_01'
+      ],
+      module: module
+    });
 
-        let modules = await registry.rebuild_registry();
+    await registry.rebuild();
+    let modules = registry.modules();
+    expect(modules).to.have.length(2);
+  }
 
-        expect(modules).to.have.length(2);
-        expect(_.find(modules,{name:'hc_test1'})).to.not.be.null;
-    }
+  @test
+  async 'find modules in multiple node_modules directories'() {
+
+    let registry = new ModuleRegistry({
+      paths: [
+        './test/functional/fake_scenario/fake_app_01',
+        './test/functional/fake_scenario/fake_app_01/own_modules',
+      ],
+      module: module
+    });
+
+    await registry.rebuild();
+    let modules = registry.modules();
+    expect(modules).to.have.length(3);
+  }
+
+  @test
+  async 'find modules in multiple node_modules directories with filter'() {
+
+    let registry = new ModuleRegistry({
+      paths: [
+        './test/functional/fake_scenario/fake_app_01',
+        './test/functional/fake_scenario/fake_app_01/own_modules',
+      ],
+      module: module,
+      packageFilter:(packageJson) => {return _.has(packageJson,'core_module') && packageJson.core_module}
+    });
+
+    await registry.rebuild();
+    let modules = registry.modules();
+    expect(modules).to.have.length(1);
+    expect(modules[0].name).to.eq('module2');
+    expect((await modules[0].packageJson()).core_module).to.be.true;
+
+    registry = new ModuleRegistry({
+      paths: [
+        './test/functional/fake_scenario/fake_app_01',
+        './test/functional/fake_scenario/fake_app_01/own_modules',
+      ],
+      module: module,
+      packageFilter:(packageJson) => {return _.has(packageJson,'own_module') && packageJson.own_module}
+    });
+
+    await registry.rebuild();
+    modules = registry.modules();
+    expect(modules).to.have.length(1);
+    expect(modules[0].name).to.eq('module3');
+    expect((await modules[0].packageJson()).own_module).to.be.true;
+
+  }
 
 }
-
-/*
-describe('module registry tests', function () {
-
-    before(function (done) {
-        done()
-    });
-
-
-    it('find modules with inner node_modules', function (done) {
-        this.timeout(10000);
-
-        var modules = new Modules({
-            module_paths:[
-                __dirname + '/fake_scenario/modules_fake_app2/node_modules'
-            ]
-        });
-
-        modules.rebuild_registry()
-            .then(function (modules) {
-                console.log(modules);
-                assert.equal(5, modules.length);
-                done()
-            })
-            .catch(function (err) {
-                done(err)
-
-            })
-    });
-
-    it('find modules in to directories', function (done) {
-        this.timeout(10000);
-
-        var modules = new Modules({
-            module_paths:[
-                __dirname + '/fake_scenario/modules_fake_app/node_modules',
-                __dirname + '/fake_scenario/modules_fake_app2/node_modules'
-            ]
-        });
-
-        modules.rebuild_registry()
-            .then(function (modules) {
-                console.log(modules);
-                assert.equal(5, modules.length);
-                done()
-            })
-            .catch(function (err) {
-                done(err)
-
-            })
-    })
-
-});
-
-*/

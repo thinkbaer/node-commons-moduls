@@ -1,9 +1,9 @@
 {
-  "name": "hc_test2",
+  "name": "module3",
   "version": "0.0.1",
-  "hc_module": true,
+  "own_module": true,
   "main": "module.js",
   "dependencies":{
-    "hc_test1":"0.0.1"
+    "module1":"0.0.1"
   }
 }
