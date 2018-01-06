@@ -21,13 +21,15 @@ export abstract class IModuleLoader<T extends IModuleHandle,OPT> {
   }
 
   add(handle: T) {
-    let exists = _.find(this._handles, (x) => {
-      return x.module.name === handle.module.name
-    });
-    if (!exists) {
-      this._handles.push(handle);
-    } else {
-      throw new Error('module ' + handle.module.name + ' already loaded');
+    if(handle){
+      let exists = _.find(this._handles, (x) => {
+        return x.module.name === handle.module.name
+      });
+      if (!exists) {
+        this._handles.push(handle);
+      } else {
+        throw new Error('module ' + handle.module.name + ' already loaded');
+      }
     }
     return handle;
   }

@@ -11,7 +11,7 @@ export interface INpmlsOptions {
 
 export class Helper {
 
-  static readFile(file:string):Promise<any>{
+  static readFile(file:string):Promise<Buffer>{
     return new Promise((resolve, reject) => {
       if (fs.existsSync(file)) {
         fs.readFile(file, (err, buf) => {

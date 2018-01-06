@@ -9,7 +9,7 @@ import {IClassesOptions} from "../../src/loader/classes/IClassesOptions";
 let registry: ModuleRegistry;
 
 @suite('load of classes')
-class Load_by_requireSpec {
+class Load_of_classesSpec {
 
   static async before() {
     registry = new ModuleRegistry({
