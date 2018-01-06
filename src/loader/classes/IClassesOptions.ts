@@ -1,8 +1,14 @@
+import {StringOrFunction} from "../../types";
+
 export interface IClassesLib {
 
   topic: string;
 
-  paths: string[];
+  /**
+   * Can contain file references or paths
+   */
+  refs?: string[];
+
 
 }
 

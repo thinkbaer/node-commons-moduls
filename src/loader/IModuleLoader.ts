@@ -7,21 +7,25 @@ export abstract class IModuleLoader<T extends IModuleHandle,OPT> {
 
   _options: OPT;
 
-  registry: ModuleRegistry;
+  protected readonly registry: ModuleRegistry;
 
-  handles: T[] = [];
+  _handles: T[] = [];
 
   constructor(registry: ModuleRegistry, options?:OPT) {
     this.registry = registry;
     this._options = options || <OPT>{}
   }
 
+  handles():T[]{
+    return this._handles;
+  }
+
   add(handle: T) {
-    let exists = _.find(this.handles, (x) => {
+    let exists = _.find(this._handles, (x) => {
       return x.module.name === handle.module.name
     });
     if (!exists) {
-      this.handles.push(handle);
+      this._handles.push(handle);
     } else {
       throw new Error('module ' + handle.module.name + ' already loaded');
     }
@@ -32,20 +36,18 @@ export abstract class IModuleLoader<T extends IModuleHandle,OPT> {
 
   load(module: Module):Promise<T> ;
   load(modules: Module[]):Promise<T[]> ;
-  load(modules: Module | Module[]):Promise<T | T[]> {
+  async load(modules: Module | Module[]):Promise<T | T[]> {
     if(_.isArray(modules)){
-      /*
       let m = []
       for(let x of modules){
         let y = await this.loadOne(x);
         m.push(this.add(y));
       }
       return m;
-      */
-
+      /*
       let pm = _.map(modules,(m:Module) => {return this.loadOne(m).then(r => {return this.add(r)})});
       return Promise.all(pm);
-
+      */
     }else {
       return this.loadOne(modules).then(r => {return this.add(r)});
     }

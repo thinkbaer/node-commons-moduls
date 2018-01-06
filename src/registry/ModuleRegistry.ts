@@ -121,6 +121,9 @@ export class ModuleRegistry {
     }
 
     this._modules.sort((a, b) => {
+      if(a.weight === b.weight){
+        return a.name.localeCompare(b.name);
+      }
       return a.weight - b.weight
     });
 

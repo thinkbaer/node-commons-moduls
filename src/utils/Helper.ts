@@ -19,8 +19,7 @@ export class Helper {
             reject(err);
           } else {
             try {
-              let data = JSON.parse(buf.toString('utf8'));
-              resolve(data);
+              resolve(buf);
             } catch (err) {
               reject(err);
             }
@@ -37,7 +36,11 @@ export class Helper {
     if (!/package\.json$/.test(_path)) {
       _path = path.join(_path, 'package.json')
     }
-    return this.readFile(_path);
+    return this.readFile(_path).then(buf => {
+      let data = buf.toString('utf8');
+      let json = JSON.parse(data);
+      return json;
+    });
   }
 
   static ucfirst(word: string): string {

@@ -51,7 +51,7 @@ export class RequireLoader extends IModuleLoader<RequireHandle,{}> {
       hook = options.hook
     }
 
-    let handles = _.filter(this.handles, function (_x) {
+    let handles = _.filter(this._handles, function (_x) {
       return _x.usesHooks.indexOf(hook) > -1
     });
 

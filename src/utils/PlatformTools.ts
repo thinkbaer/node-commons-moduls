@@ -38,7 +38,11 @@ export class PlatformTools {
     }else{
       this.workdir = null;
     }
+  }
 
+
+  static join(...args:string[]){
+    return path.join(...args);
   }
 
   /**
