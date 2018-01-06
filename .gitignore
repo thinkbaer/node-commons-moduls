@@ -69,3 +69,6 @@ typings/
 # default
 build/
 tmp/
+
+# package
+package-lock.json
