@@ -40,7 +40,6 @@
     "gulp-replace": "^0.6.1",
     "gulp-shell": "^0.6.3",
     "gulp-sourcemaps": "^2.6.0",
-    "gulp-tslint": "^8.1.1",
     "gulp-typescript": "^3.1.7",
     "gulpclass": "^0.1.2",
     "mocha": "^3.5.3",
