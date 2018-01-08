@@ -12,7 +12,7 @@ class Load_by_requireSpec {
 
     let registry = new ModuleRegistry({
       paths: [
-        './test/functional/fake_scenario/fake_app_01'
+        './test/functional/fake_scenario/fake_app_01/node_modules'
       ],
     });
 

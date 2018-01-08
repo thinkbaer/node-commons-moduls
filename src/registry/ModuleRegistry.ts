@@ -1,6 +1,4 @@
 import * as _ from 'lodash';
-import * as fs from 'fs';
-import * as path from 'path';
 
 import {Module} from "./Module";
 import {Helper, INpmlsOptions} from "../utils/Helper";
@@ -11,6 +9,7 @@ import {IModuleHandle} from "../loader/IModuleHandle";
 
 const DEFAULT:IModuleRegistryOptions = {
   paths:[],
+  // skipCheck:[],
   module:module
 }
 
@@ -27,7 +26,9 @@ export class ModuleRegistry {
     _.defaults(options,DEFAULT);
     this._modules = [];
     this._options = options;
-    this.paths = Helper.checkPaths(options.paths || []);
+
+    this.paths = options.paths; // Helper.checkPaths(options.paths || []);
+
     this._options.depth = this._options.depth || 2
   }
 

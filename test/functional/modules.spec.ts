@@ -13,7 +13,7 @@ class ModulesSpec {
 
     let registry = new ModuleRegistry({
       paths: [
-        __dirname + '/fake_scenario/fake_app_01'
+        __dirname + '/fake_scenario/fake_app_01/node_modules'
       ],
       module: module
     });
@@ -28,7 +28,7 @@ class ModulesSpec {
 
     let registry = new ModuleRegistry({
       paths: [
-        './test/functional/fake_scenario/fake_app_01',
+        './test/functional/fake_scenario/fake_app_01/node_modules',
         './test/functional/fake_scenario/fake_app_01/own_modules',
       ],
       module: module
@@ -44,7 +44,7 @@ class ModulesSpec {
 
     let registry = new ModuleRegistry({
       paths: [
-        './test/functional/fake_scenario/fake_app_01',
+        './test/functional/fake_scenario/fake_app_01/node_modules',
         './test/functional/fake_scenario/fake_app_01/own_modules',
       ],
       module: module,
@@ -59,7 +59,7 @@ class ModulesSpec {
 
     registry = new ModuleRegistry({
       paths: [
-        './test/functional/fake_scenario/fake_app_01',
+        './test/functional/fake_scenario/fake_app_01/node_modules',
         './test/functional/fake_scenario/fake_app_01/own_modules',
       ],
       module: module,

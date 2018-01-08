@@ -16,7 +16,7 @@ class Load_of_settingsSpec {
   static async before() {
     registry = new ModuleRegistry({
       paths: [
-        './test/functional/fake_scenario/fake_app_03'
+        './test/functional/fake_scenario/fake_app_03/node_modules'
       ],
     });
     await registry.rebuild();

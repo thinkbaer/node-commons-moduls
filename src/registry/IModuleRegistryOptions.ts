@@ -1,10 +1,12 @@
 export interface IModuleRegistryOptions {
 
-    packageFilter?: (packageJson: any) => boolean;
+  packageFilter?: (packageJson: any) => boolean;
 
-    paths: string[]
+  paths: string[]
 
-    depth?: number
+  //skipCheck: string[]
 
-    module?: NodeModule
+  depth?: number
+
+  module?: NodeModule
 }

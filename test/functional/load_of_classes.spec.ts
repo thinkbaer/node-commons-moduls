@@ -14,7 +14,7 @@ class Load_of_classesSpec {
   static async before() {
     registry = new ModuleRegistry({
       paths: [
-        './test/functional/fake_scenario/fake_app_02'
+        './test/functional/fake_scenario/fake_app_02/node_modules'
       ],
     });
     await registry.rebuild();
