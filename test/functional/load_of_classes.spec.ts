@@ -29,6 +29,9 @@ class Load_of_classesSpec {
       libs: [{
         topic: 'generic',
         refs: ['lib']
+      },{
+        topic: 'commands',
+        refs: ['commands']
       }]
     });
     let handles = loader.handles();
@@ -38,7 +41,11 @@ class Load_of_classesSpec {
     expect(classes).to.have.length(2);
     expect(classes[0].prototype.constructor.name).to.eq('KlassM3');
     expect(classes[1].prototype.constructor.name).to.eq('KlassM4');
+
+    let commandClasses = loader.getClasses('commands');
+    expect(commandClasses).to.have.length(1);
   }
+
 
 
   @test
