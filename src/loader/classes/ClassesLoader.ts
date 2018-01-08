@@ -59,7 +59,6 @@ export class ClassesLoader extends IModuleLoader<ClassesHandle, IClassesOptions>
       if (!_.isEmpty(classes)) {
         handle.add(lib.topic, refs, classes);
       }
-
     }
 
     return handle
