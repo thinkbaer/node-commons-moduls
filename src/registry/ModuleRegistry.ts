@@ -5,12 +5,13 @@ import {Helper, INpmlsOptions} from "../utils/Helper";
 import {IModuleRegistryOptions} from "./IModuleRegistryOptions";
 import {IModuleLoader} from "../loader/IModuleLoader";
 import {IModuleHandle} from "../loader/IModuleHandle";
+import {PlatformTools} from "../utils/PlatformTools";
 
 
-const DEFAULT:IModuleRegistryOptions = {
-  paths:[],
+const DEFAULT: IModuleRegistryOptions = {
+  paths: [],
   // skipCheck:[],
-  module:module
+  module: module
 }
 
 export class ModuleRegistry {
@@ -23,12 +24,10 @@ export class ModuleRegistry {
 
 
   constructor(options: IModuleRegistryOptions) {
-    _.defaults(options,DEFAULT);
+    _.defaults(options, DEFAULT);
     this._modules = [];
     this._options = options;
-
     this.paths = options.paths; // Helper.checkPaths(options.paths || []);
-
     this._options.depth = this._options.depth || 2
   }
 
@@ -75,7 +74,17 @@ export class ModuleRegistry {
       depth: this._options.depth
     };
 
-    let packageJsons = await Helper.npmls(node_modules_dir, options);
+    let packageJsons = [];
+    if (PlatformTools.fileExist(PlatformTools.join(node_modules_dir, 'package.json'))) {
+      options.depth++;
+      let dirname = PlatformTools.dirname(node_modules_dir);
+      let basename = PlatformTools.basename(node_modules_dir);
+        // TODO!!!!
+      packageJsons = await Helper.lookupNpmInDirectory(dirname,basename,[], options);
+    } else {
+      packageJsons = await Helper.npmls(node_modules_dir, options);
+    }
+
     return _.map(packageJsons, (module: any) => {
       return Module.fromOptions(module)
     })
@@ -122,7 +131,7 @@ export class ModuleRegistry {
     }
 
     this._modules.sort((a, b) => {
-      if(a.weight === b.weight){
+      if (a.weight === b.weight) {
         return a.name.localeCompare(b.name);
       }
       return a.weight - b.weight
@@ -132,8 +141,8 @@ export class ModuleRegistry {
   }
 
 
-  async loader<T extends IModuleLoader<IModuleHandle,OPT>,OPT>(loaderClazz: Function,options?:OPT): Promise<T> {
-    let instance = <T>Reflect.construct(loaderClazz, [this,options]);
+  async loader<T extends IModuleLoader<IModuleHandle, OPT>, OPT>(loaderClazz: Function, options?: OPT): Promise<T> {
+    let instance = <T>Reflect.construct(loaderClazz, [this, options]);
     await instance.load(this.modules());
     return instance;
   }

@@ -80,61 +80,62 @@ export class Helper {
       return []
     }
 
-    let filter = options.filter;
     options.level = inc + 1;
 
     let modules: any[] = [];
-
     let directories = await this.readdir(node_modules_dir);
     await Promise.all(_.map(directories, async (directory: string) => {
-
-      let _path = path.join(node_modules_dir, directory);
-      if (!fs.existsSync(_path + '/package.json')) {
-        return;
-      }
-
-      let package_json = await this.getPackageJson(_path);
-      let modul_exists = _.find(modules, {name: directory});
-
-      if (modul_exists) return;
-
-      package_json.path = _path;
-      package_json.child_modules = [];
-
-      if (filter) {
-        if (!filter(package_json)) {
-          return;
-        }
-      }
-      modules.push(package_json);
-
-      // FIXME detect the node_modules path
-      let _new_node_module_dir = path.join(_path, 'node_modules');
-      try {
-        let stat = await this.stat(_new_node_module_dir);
-        if (stat && stat.isDirectory()) {
-          let _modules = await  this.npmls(_new_node_module_dir, options);
-          package_json.has_node_modules = true;
-          for (let _x of _modules) {
-            package_json.child_modules.push(_x.name);
-            let _modul_exists = modules.find(function (_m) {
-              return _m.name == _x.name
-            });
-            if (!_modul_exists) {
-              modules.push(_x)
-            }
-          }
-        } else {
-          package_json.has_node_modules = false
-        }
-      } catch (err) {
-        package_json.has_node_modules = false
-      }
+      return Helper.lookupNpmInDirectory(node_modules_dir,directory,modules,options)
     }));
-
     return modules;
   }
 
+
+  static async lookupNpmInDirectory(node_modules_dir:string, directory:string, modules:any[] = [], options?:any):Promise<any>{
+    let _path = path.join(node_modules_dir, directory);
+    if (!fs.existsSync(_path + '/package.json')) {
+      return;
+    }
+
+    let package_json = await this.getPackageJson(_path);
+    let modul_exists = _.find(modules, {name: directory});
+
+    if (modul_exists) return;
+
+    package_json.path = _path;
+    package_json.child_modules = [];
+
+    if (options && options.filter) {
+      if (!options.filter(package_json)) {
+        return;
+      }
+    }
+    modules.push(package_json);
+
+    // FIXME detect the node_modules path
+    let _new_node_module_dir = path.join(_path, 'node_modules');
+    try {
+      let stat = await this.stat(_new_node_module_dir);
+      if (stat && stat.isDirectory()) {
+        let _modules = await  this.npmls(_new_node_module_dir, options);
+        package_json.has_node_modules = true;
+        for (let _x of _modules) {
+          package_json.child_modules.push(_x.name);
+          let _modul_exists = modules.find(function (_m) {
+            return _m.name == _x.name
+          });
+          if (!_modul_exists) {
+            modules.push(_x)
+          }
+        }
+      } else {
+        package_json.has_node_modules = false
+      }
+    } catch (err) {
+      package_json.has_node_modules = false
+    }
+    return modules;
+  }
 
   static checkPaths(paths: string[]) {
     let ret_paths = []

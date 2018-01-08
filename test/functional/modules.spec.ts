@@ -74,4 +74,23 @@ class ModulesSpec {
 
   }
 
+
+  @test
+  async 'find direct module'() {
+
+
+    let registry = new ModuleRegistry({
+      paths: [
+        './test/functional/fake_scenario/fake_app_01/node_modules/module1',
+      ],
+      module: module
+    });
+
+    await registry.rebuild();
+    let modules = registry.modules();
+    expect(modules).to.have.length(1);
+    expect(modules[0].name).to.eq('module1');
+
+  }
+
 }
