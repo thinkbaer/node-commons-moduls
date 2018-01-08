@@ -15,7 +15,7 @@ export class ClassesLoader extends IModuleLoader<ClassesHandle, IClassesOptions>
     let classes:Function[] = [];
     for(let handle of this.handles()){
       let cls = handle.getClasses(topic);
-      if(!_.isEmpty()){
+      if(!_.isEmpty(cls)){
         classes = classes.concat(cls);
       }
     }
