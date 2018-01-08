@@ -14,7 +14,10 @@ export class ClassesLoader extends IModuleLoader<ClassesHandle, IClassesOptions>
   getClasses(topic: string): Function[] {
     let classes:Function[] = [];
     for(let handle of this.handles()){
-      classes = classes.concat(handle.getClasses(topic));
+      let cls = handle.getClasses(topic);
+      if(!_.isEmpty()){
+        classes = classes.concat(cls);
+      }
     }
     return classes;
   }
@@ -43,12 +46,12 @@ export class ClassesLoader extends IModuleLoader<ClassesHandle, IClassesOptions>
         if (PlatformTools.fileExist(lib_path) && PlatformTools.isDir(lib_path)) {
           refs.push(PlatformTools.join(lib_path, '*'));
         } else if (PlatformTools.fileExist(lib_path) && PlatformTools.isFile(lib_path)) {
-          refs.push(PlatformTools.join(lib_path));
+          refs.push(lib_path);
         } else if (PlatformTools.fileExist(lib_path + '.js') && PlatformTools.isFile(lib_path + '.js')) {
-          refs.push(PlatformTools.join(lib_path + '.js'));
+          refs.push(lib_path + '.js');
         } else if (PlatformTools.fileExist(lib_path + '.ts') && PlatformTools.isFile(lib_path + '.ts')) {
           // if ts-node is used on start
-          refs.push(PlatformTools.join(lib_path + '.ts'));
+          refs.push(lib_path + '.ts');
         }
       }
 
