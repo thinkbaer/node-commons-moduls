@@ -38,7 +38,6 @@ export class ClassesLoader extends IModuleLoader<ClassesHandle, IClassesOptions>
   protected async loadOne(modul: Module): Promise<ClassesHandle> {
     let handle = new ClassesHandle(modul);
 
-
     for (let lib of this._options.libs) {
       let refs = []
       for (let _path of lib.refs) {
