@@ -6,6 +6,7 @@ import {IModuleRegistryOptions} from "./IModuleRegistryOptions";
 import {IModuleLoader} from "../loader/IModuleLoader";
 import {IModuleHandle} from "../loader/IModuleHandle";
 import {PlatformTools} from "../utils/PlatformTools";
+import {ClassesLoader, IClassesOptions, IRequireOptions, ISettingsOptions, RequireLoader, SettingsLoader} from "../";
 
 
 const DEFAULT: IModuleRegistryOptions = {
@@ -145,5 +146,17 @@ export class ModuleRegistry {
     let instance = <T>Reflect.construct(loaderClazz, [this, options]);
     await instance.load(this.modules());
     return instance;
+  }
+
+  async createRequireLoader(options?:IRequireOptions):Promise<RequireLoader>{
+    return this.loader<RequireLoader,IRequireOptions>(RequireLoader,options)
+  }
+
+  async createClassesLoader(options?:IClassesOptions):Promise<ClassesLoader>{
+    return this.loader<ClassesLoader,IClassesOptions>(ClassesLoader,options)
+  }
+
+  async createSettingsLoader(options?:ISettingsOptions):Promise<SettingsLoader>{
+    return this.loader<SettingsLoader,ISettingsOptions>(SettingsLoader,options)
   }
 }
