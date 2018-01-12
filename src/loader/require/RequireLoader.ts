@@ -7,11 +7,12 @@ import {IModuleLoader} from "../IModuleLoader";
 
 import {Module} from "../../registry/Module";
 import {Helper} from "../../utils/Helper";
+import {IRequireOptions} from "./IRequireOptions";
 
 
 
 
-export class RequireLoader extends IModuleLoader<RequireHandle,{}> {
+export class RequireLoader extends IModuleLoader<RequireHandle,IRequireOptions> {
 
 
   protected async loadOne(modul: Module):Promise<RequireHandle> {
@@ -25,7 +26,11 @@ export class RequireLoader extends IModuleLoader<RequireHandle,{}> {
       _module['paths'].unshift(new_node_modules_dir)
     }
 
-    handle.ref = _module.require(modul.name);
+    if(modul.internal){
+      handle.ref = _module.require(modul.name);
+    }else{
+      handle.ref = _module.require(modul.getMain());
+    }
 
     if (handle.ref.exposesHooks) {
       handle.exposesHooks = handle.ref.exposesHooks

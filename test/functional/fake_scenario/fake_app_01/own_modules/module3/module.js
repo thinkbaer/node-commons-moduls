@@ -3,17 +3,12 @@
  */
 exports = module.exports = {
 
-    onExtend : function(){
-
-    },
 
     onBoot : function(REF){
-      REF.modul1 = true;
-    },
-
-    onRoutes : function(){
-
+      REF.modul3 = true;
+      return 'module3';
     }
+
 
 
 };

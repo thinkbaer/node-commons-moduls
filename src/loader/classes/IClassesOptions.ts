@@ -1,6 +1,10 @@
 import {StringOrFunction} from "../../types";
+import {Module} from "../../index";
+import {IModuleOptions} from "../IModuleOptions";
 
 export interface IClassesLib {
+
+
 
   topic: string;
 
@@ -12,7 +16,7 @@ export interface IClassesLib {
 
 }
 
-export interface IClassesOptions {
+export interface IClassesOptions extends IModuleOptions{
 
   libs: IClassesLib[];
 

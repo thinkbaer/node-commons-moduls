@@ -9,7 +9,6 @@ export * from  "./loader/classes/ClassesHandle";
 export * from  "./loader/classes/ClassesLoader";
 export * from  "./loader/classes/IClassesOptions";
 export * from  "./loader/IModuleLoader";
-export * from  "./loader/LoaderManager";
 export * from  "./loader/settings/SettingsLoader";
 export * from  "./loader/settings/ISettingsOptions";
 export * from  "./loader/settings/SettingsHandle";
