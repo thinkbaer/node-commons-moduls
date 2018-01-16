@@ -5,8 +5,9 @@ import {Helper, INpmlsOptions} from "../utils/Helper";
 import {IModuleRegistryOptions} from "./IModuleRegistryOptions";
 import {IModuleLoader} from "../loader/IModuleLoader";
 import {IModuleHandle} from "../loader/IModuleHandle";
-import {PlatformTools} from "../utils/PlatformTools";
+
 import {ClassesLoader, IClassesOptions, IRequireOptions, ISettingsOptions, RequireLoader, SettingsLoader} from "../";
+import {PlatformUtils} from "commons-base";
 
 
 const DEFAULT: IModuleRegistryOptions = {
@@ -79,10 +80,10 @@ export class ModuleRegistry {
     };
 
     let packageJsons = [];
-    if (PlatformTools.fileExist(PlatformTools.join(node_modules_dir, 'package.json'))) {
+    if (PlatformUtils.fileExist(PlatformUtils.join(node_modules_dir, 'package.json'))) {
       options.depth++;
-      let dirname = PlatformTools.dirname(node_modules_dir);
-      let basename = PlatformTools.basename(node_modules_dir);
+      let dirname = PlatformUtils.dirname(node_modules_dir);
+      let basename = PlatformUtils.basename(node_modules_dir);
         // TODO!!!!
       packageJsons = await Helper.lookupNpmInDirectory(dirname,basename,[], options);
     } else {

@@ -1,7 +1,8 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as _ from 'lodash';
-import {PlatformTools} from "./PlatformTools";
+import {PlatformUtils} from "commons-base";
+
 
 
 export interface INpmlsOptions {
@@ -103,7 +104,7 @@ export class Helper {
 
     if (modul_exists) return;
 
-    package_json.path = PlatformTools.pathResolve(_path);
+    package_json.path = PlatformUtils.pathResolve(_path);
     package_json.child_modules = [];
 
     if (options && options.filter) {

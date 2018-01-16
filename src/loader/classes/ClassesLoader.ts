@@ -4,8 +4,7 @@ import {IModuleLoader} from "../IModuleLoader";
 import {Module} from "../../registry/Module";
 import {ClassesHandle} from "./ClassesHandle";
 import {IClassesOptions} from "./IClassesOptions";
-import {PlatformTools} from "../../utils/PlatformTools";
-import {ClassLoader} from "../../utils/ClassLoader";
+import {ClassLoader, PlatformUtils} from "commons-base";
 
 
 export class ClassesLoader extends IModuleLoader<ClassesHandle, IClassesOptions> {
@@ -41,14 +40,14 @@ export class ClassesLoader extends IModuleLoader<ClassesHandle, IClassesOptions>
     for (let lib of this._options.libs) {
       let refs = []
       for (let _path of lib.refs) {
-        let lib_path = PlatformTools.join(modul.path, _path);
-        if (PlatformTools.fileExist(lib_path) && PlatformTools.isDir(lib_path)) {
-          refs.push(PlatformTools.join(lib_path, '*'));
-        } else if (PlatformTools.fileExist(lib_path) && PlatformTools.isFile(lib_path)) {
+        let lib_path = PlatformUtils.join(modul.path, _path);
+        if (PlatformUtils.fileExist(lib_path) && PlatformUtils.isDir(lib_path)) {
+          refs.push(PlatformUtils.join(lib_path, '*'));
+        } else if (PlatformUtils.fileExist(lib_path) && PlatformUtils.isFile(lib_path)) {
           refs.push(lib_path);
-        } else if (PlatformTools.fileExist(lib_path + '.js') && PlatformTools.isFile(lib_path + '.js')) {
+        } else if (PlatformUtils.fileExist(lib_path + '.js') && PlatformUtils.isFile(lib_path + '.js')) {
           refs.push(lib_path + '.js');
-        } else if (PlatformTools.fileExist(lib_path + '.ts') && PlatformTools.isFile(lib_path + '.ts')) {
+        } else if (PlatformUtils.fileExist(lib_path + '.ts') && PlatformUtils.isFile(lib_path + '.ts')) {
           // if ts-node is used on start
           refs.push(lib_path + '.ts');
         }

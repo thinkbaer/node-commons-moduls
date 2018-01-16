@@ -4,7 +4,8 @@ import * as fs from 'fs'
 import * as _ from 'lodash'
 import {ModuleRegistry} from "../../src/registry/ModuleRegistry";
 import {Helper} from "../../src/utils/Helper";
-import {PlatformTools} from "../../src/utils/PlatformTools";
+import {PlatformUtils} from "commons-base";
+
 
 
 @suite('helper functions')
@@ -34,8 +35,8 @@ class ModulesSpec {
   @test
   async 'remove path'() {
     let _path = __dirname + '/fake_scenario/fake_app_01';
-    let dirname = PlatformTools.dirname(_path);
-    let basename = PlatformTools.basename(_path);
+    let dirname = PlatformUtils.dirname(_path);
+    let basename = PlatformUtils.basename(_path);
     expect(dirname).to.eq(__dirname + '/fake_scenario');
     expect(basename).to.eq('fake_app_01');
 

@@ -4,8 +4,9 @@ import {IModuleLoader} from "../IModuleLoader";
 import {Module} from "../../registry/Module";
 import {SettingsHandle} from "./SettingsHandle";
 import {ISettingsOptions} from "./ISettingsOptions";
-import {PlatformTools} from "../../utils/PlatformTools";
+
 import {Helper} from "../../utils/Helper";
+import {PlatformUtils} from "commons-base";
 
 
 export class SettingsLoader extends IModuleLoader<SettingsHandle, ISettingsOptions> {
@@ -21,10 +22,10 @@ export class SettingsLoader extends IModuleLoader<SettingsHandle, ISettingsOptio
 
   protected async loadOne(modul: Module): Promise<SettingsHandle> {
     let handle = null;
-    let filepath = PlatformTools.join(modul.path, this._options.ref);
-    let ext = PlatformTools.pathExtname(filepath, false);
+    let filepath = PlatformUtils.join(modul.path, this._options.ref);
+    let ext = PlatformUtils.pathExtname(filepath, false);
 
-    if(PlatformTools.fileExist(filepath)){
+    if(PlatformUtils.fileExist(filepath)){
       handle = new SettingsHandle(modul);
       let file = await Helper.readFile(filepath);
       let settings = {}
