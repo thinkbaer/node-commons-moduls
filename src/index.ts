@@ -17,4 +17,4 @@ export * from  "./loader/classes/ClassesLoader";
 export * from  "./loader/settings/ISettingsOptions";
 export * from  "./loader/settings/SettingsLoader";
 export * from  "./loader/settings/SettingsHandle";
-export * from  "./types";
+
