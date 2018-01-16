@@ -48,7 +48,9 @@ class ModulesSpec {
         './test/functional/fake_scenario/fake_app_01/own_modules',
       ],
       module: module,
-      packageFilter:(packageJson) => {return _.has(packageJson,'core_module') && packageJson.core_module}
+      packageFilter: (packageJson) => {
+        return _.has(packageJson, 'core_module') && packageJson.core_module
+      }
     });
 
     await registry.rebuild();
@@ -63,7 +65,9 @@ class ModulesSpec {
         './test/functional/fake_scenario/fake_app_01/own_modules',
       ],
       module: module,
-      packageFilter:(packageJson) => {return _.has(packageJson,'own_module') && packageJson.own_module}
+      packageFilter: (packageJson) => {
+        return _.has(packageJson, 'own_module') && packageJson.own_module
+      }
     });
 
     await registry.rebuild();
@@ -78,7 +82,6 @@ class ModulesSpec {
   @test
   async 'find direct module'() {
 
-
     let registry = new ModuleRegistry({
       paths: [
         './test/functional/fake_scenario/fake_app_01/node_modules/module1',
@@ -90,6 +93,24 @@ class ModulesSpec {
     let modules = registry.modules();
     expect(modules).to.have.length(1);
     expect(modules[0].name).to.eq('module1');
+
+  }
+
+  @test
+  async 'ignore duplicate modules'() {
+    let registry = new ModuleRegistry({
+      paths: [
+        './test/functional/fake_scenario/fake_app_04/node_modules',
+      ],
+      depth: 3,
+      module: module
+    });
+
+    await registry.rebuild();
+    let modules = registry.modules();
+    expect(modules).to.have.length(2);
+    expect(modules[0].name).to.eq('module6');
+    expect(modules[1].name).to.eq('module5');
 
   }
 

@@ -47,13 +47,49 @@ export abstract class IModuleLoader<T extends IModuleHandle, OPT extends IModule
           continue;
         }
         let y = await this.loadOne(x);
-        m.push(this.add(y));
+
+        try {
+          let res = this.add(y);
+          m.push(res);
+        } catch (err) {
+          if (this.registry.options().handleErrorOnDuplicate) {
+            switch (this.registry.options().handleErrorOnDuplicate) {
+              case 'skip':
+                break;
+              case 'log':
+                console.error(err);
+                break;
+              default:
+                throw err;
+            }
+          } else {
+            throw err;
+          }
+        }
       }
       return m;
     } else {
-      return this.loadOne(modules).then(r => {
-        return this.add(r)
-      });
+      let res = null;
+      let y = await this.loadOne(modules);
+      try {
+        res = this.add(y);
+
+      } catch (err) {
+        if (this.registry.options().handleErrorOnDuplicate) {
+          switch (this.registry.options().handleErrorOnDuplicate) {
+            case 'skip':
+              break;
+            case 'log':
+              console.error(err);
+              break;
+            default:
+              throw err;
+          }
+        } else {
+          throw err;
+        }
+      }
+      return res;
     }
   }
 

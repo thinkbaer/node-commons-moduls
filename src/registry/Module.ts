@@ -15,7 +15,6 @@ export class Module {
 
   child_modules: string[] = [];
 
-
   /**
    * if modul is declared outside a node_modules directory
    *
@@ -25,12 +24,7 @@ export class Module {
 
   main: string;
 
-  /*
-  handle: Function;
 
-
-
-*/
 
   constructor() {
     this.name = null;
@@ -44,7 +38,7 @@ export class Module {
   }
 
 
-  packageJson():Promise<any>{
+  packageJson(): Promise<any> {
     return Helper.getPackageJson(this.path)
   }
 

@@ -9,4 +9,9 @@ export interface IModuleRegistryOptions {
   depth?: number
 
   module?: NodeModule
+
+  /**
+   * how should error be handled for already existsing moduls
+   */
+  handleErrorOnDuplicate?:'log' | 'skip' | 'throw'
 }

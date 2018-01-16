@@ -12,7 +12,8 @@ import {ClassesLoader, IClassesOptions, IRequireOptions, ISettingsOptions, Requi
 const DEFAULT: IModuleRegistryOptions = {
   paths: [],
   // skipCheck:[],
-  module: module
+  module: module,
+  handleErrorOnDuplicate:'skip'
 }
 
 export class ModuleRegistry {
@@ -45,14 +46,16 @@ export class ModuleRegistry {
       _.map(this.paths, this._scan_module_path.bind(this))
     );
 
+    let to_register = [];
     let one_list = [].concat(...modules_lists);
+
     for (let __modul of one_list) {
-      let _modul = _.find(one_list, function (_x) {
+      let _modul = _.find(to_register, function (_x) {
         return _x.name == __modul.name
       });
 
       if (!_modul) {
-        one_list.push(__modul)
+        to_register.push(__modul)
       } else {
         _modul.multi_implements = true
         // TODO: if module already exists check version and replace them
@@ -60,7 +63,7 @@ export class ModuleRegistry {
     }
 
     //  await Promise.all(_.map(modules, this.load.bind(this)));
-    this._build_registry(one_list);
+    this._build_registry(to_register);
     return this;
   }
 
