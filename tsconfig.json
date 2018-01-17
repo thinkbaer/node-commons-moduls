@@ -26,6 +26,7 @@
     ]
   },
   "exclude": [
+    "archive",
     "node_modules",
     "build",
     "dist",

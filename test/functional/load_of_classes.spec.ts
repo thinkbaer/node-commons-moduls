@@ -29,7 +29,7 @@ class Load_of_classesSpec {
       libs: [{
         topic: 'generic',
         refs: ['lib']
-      },{
+      }, {
         topic: 'commands',
         refs: ['commands']
       }]
@@ -45,7 +45,6 @@ class Load_of_classesSpec {
     let commandClasses = loader.getClasses('commands');
     expect(commandClasses).to.have.length(1);
   }
-
 
 
   @test
@@ -67,6 +66,24 @@ class Load_of_classesSpec {
 
     let classesByModule = loader.getClassesByModule('generic');
     expect(Object.keys(classesByModule)).to.deep.eq(['module3', 'module4']);
+  }
+
+
+  @test
+  async 'use loader by pattern'() {
+    let loader = await registry.createClassesLoader({
+      libs: [{
+        topic: 'pattern',
+        refs: ['clazzes/*/dir']
+      }]
+    });
+
+    let handles = loader.handles();
+    expect(handles).to.have.length(1);
+
+    let classes = loader.getClasses('pattern');
+    expect(classes).to.have.length(2);
+
   }
 
 }

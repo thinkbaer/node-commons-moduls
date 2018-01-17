@@ -1,4 +1,6 @@
 import * as _ from 'lodash';
+import * as glob from "glob";
+
 import {IModuleLoader} from "../IModuleLoader";
 
 import {Module} from "../../registry/Module";
@@ -41,11 +43,16 @@ export class ClassesLoader extends IModuleLoader<ClassesHandle, IClassesOptions>
       let refs = []
       for (let _path of lib.refs) {
         let lib_path = PlatformUtils.join(modul.path, _path);
-        if (PlatformUtils.fileExist(lib_path) && PlatformUtils.isDir(lib_path)) {
-          refs.push(PlatformUtils.join(lib_path, '*'));
-        } else if (PlatformUtils.fileExist(lib_path) && PlatformUtils.isFile(lib_path)) {
-          refs.push(lib_path);
-        } else if (PlatformUtils.fileExist(lib_path + '.js') && PlatformUtils.isFile(lib_path + '.js')) {
+        let res = glob.sync(lib_path);
+        if(!_.isEmpty(res)){
+          for(let r of res){
+            if (PlatformUtils.fileExist(r) && PlatformUtils.isDir(r)) {
+              refs.push(PlatformUtils.join(r, '*'));
+            } else if (PlatformUtils.fileExist(r) && PlatformUtils.isFile(r)) {
+              refs.push(r);
+            }
+          }
+        }else if (PlatformUtils.fileExist(lib_path + '.js') && PlatformUtils.isFile(lib_path + '.js')) {
           refs.push(lib_path + '.js');
         } else if (PlatformUtils.fileExist(lib_path + '.ts') && PlatformUtils.isFile(lib_path + '.ts')) {
           // if ts-node is used on start
@@ -53,14 +60,16 @@ export class ClassesLoader extends IModuleLoader<ClassesHandle, IClassesOptions>
         }
       }
 
-      let classes = ClassLoader.importClassesFromAny(refs);
+      if(!_.isEmpty(refs)){
+        let classes = ClassLoader.importClassesFromAny(refs);
+        if (!_.isEmpty(classes)) {
+          handle.add(lib.topic, refs, classes);
+        }
 
-      if (!_.isEmpty(classes)) {
-        handle.add(lib.topic, refs, classes);
       }
     }
 
-    return handle
+    return handle.hasAnyClasses() ? handle : null;
   }
 
 
