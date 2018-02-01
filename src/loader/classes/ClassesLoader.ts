@@ -9,14 +9,16 @@ import {IClassesOptions} from "./IClassesOptions";
 import {ClassLoader, PlatformUtils} from "commons-base";
 
 
+const MODULE_NAME = '__MODULNAME__';
+
 export class ClassesLoader extends IModuleLoader<ClassesHandle, IClassesOptions> {
 
 
   getClasses(topic: string): Function[] {
-    let classes:Function[] = [];
-    for(let handle of this.handles()){
+    let classes: Function[] = [];
+    for (let handle of this.handles()) {
       let cls = handle.getClasses(topic);
-      if(!_.isEmpty(cls)){
+      if (!_.isEmpty(cls)) {
         classes = classes.concat(cls);
       }
     }
@@ -24,11 +26,11 @@ export class ClassesLoader extends IModuleLoader<ClassesHandle, IClassesOptions>
   }
 
 
-  getClassesByModule(topic: string): {[modul:string]:Function[]} {
-    let classes:{[modul:string]:Function[]} = {};
-    for(let handle of this.handles()){
+  getClassesByModule(topic: string): { [modul: string]: Function[] } {
+    let classes: { [modul: string]: Function[] } = {};
+    for (let handle of this.handles()) {
       let modulClasses = handle.getClasses(topic);
-      if(!_.isEmpty(modulClasses)){
+      if (!_.isEmpty(modulClasses)) {
         classes[handle.module.name] = modulClasses;
       }
     }
@@ -44,15 +46,15 @@ export class ClassesLoader extends IModuleLoader<ClassesHandle, IClassesOptions>
       for (let _path of lib.refs) {
         let lib_path = PlatformUtils.join(modul.path, _path);
         let res = glob.sync(lib_path);
-        if(!_.isEmpty(res)){
-          for(let r of res){
+        if (!_.isEmpty(res)) {
+          for (let r of res) {
             if (PlatformUtils.fileExist(r) && PlatformUtils.isDir(r)) {
               refs.push(PlatformUtils.join(r, '*'));
             } else if (PlatformUtils.fileExist(r) && PlatformUtils.isFile(r)) {
               refs.push(r);
             }
           }
-        }else if (PlatformUtils.fileExist(lib_path + '.js') && PlatformUtils.isFile(lib_path + '.js')) {
+        } else if (PlatformUtils.fileExist(lib_path + '.js') && PlatformUtils.isFile(lib_path + '.js')) {
           refs.push(lib_path + '.js');
         } else if (PlatformUtils.fileExist(lib_path + '.ts') && PlatformUtils.isFile(lib_path + '.ts')) {
           // if ts-node is used on start
@@ -60,16 +62,37 @@ export class ClassesLoader extends IModuleLoader<ClassesHandle, IClassesOptions>
         }
       }
 
-      if(!_.isEmpty(refs)){
+      if (!_.isEmpty(refs)) {
         let classes = ClassLoader.importClassesFromAny(refs);
         if (!_.isEmpty(classes)) {
+          if (Reflect && Reflect['getOwnMetadata']) {
+            classes.forEach(cls => {
+              Reflect['defineMetadata'](MODULE_NAME, modul.name, cls);
+            });
+          } else {
+            classes.forEach(cls => {
+              cls[MODULE_NAME] = modul.name;
+            });
+          }
           handle.add(lib.topic, refs, classes);
         }
-
       }
     }
-
     return handle.hasAnyClasses() ? handle : null;
+  }
+
+
+  static getSource(cls: Function) {
+    return ClassLoader.getSource(cls);
+  }
+
+
+  static getModulName(cls: Function) {
+    if (Reflect && Reflect['getOwnMetadata']) {
+      return Reflect['getOwnMetadata'](MODULE_NAME, cls);
+    } else {
+      return cls[MODULE_NAME] ? cls[MODULE_NAME] : null;
+    }
   }
 
 
