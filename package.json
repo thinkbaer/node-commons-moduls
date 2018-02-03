@@ -1,6 +1,6 @@
 {
   "name": "commons-moduls",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "Commons-moduls handles and manages contextual moduls for complex and itegratable applications. ",
   "main": "index.js",
   "directories": {
