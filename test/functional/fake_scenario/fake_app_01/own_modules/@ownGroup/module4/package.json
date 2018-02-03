@@ -1,0 +1,9 @@
+{
+  "name": "@ownGroup/module4",
+  "version": "0.0.1",
+  "own_module": true,
+  "main": "module.js",
+  "dependencies":{
+    "module1":"0.0.1"
+  }
+}

@@ -87,7 +87,19 @@ export class Helper {
     let modules: any[] = [];
     let directories = await this.readdir(node_modules_dir);
     await Promise.all(_.map(directories, async (directory: string) => {
-      return Helper.lookupNpmInDirectory(node_modules_dir,directory,modules,options)
+      if(/^@/.test(directory)){
+        // is grouped
+        let _grouped_node_modules_dir = PlatformUtils.join(node_modules_dir,directory);
+        let _directories = await this.readdir(_grouped_node_modules_dir);
+
+        return Promise.all(_.map(_directories,async (_directory:string) => {
+          _directory = PlatformUtils.join(directory,_directory);
+          return Helper.lookupNpmInDirectory(node_modules_dir,_directory,modules,options)
+        }));
+      }else{
+        return Helper.lookupNpmInDirectory(node_modules_dir,directory,modules,options)
+      }
+
     }));
     return modules;
   }

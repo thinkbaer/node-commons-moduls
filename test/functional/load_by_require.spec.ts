@@ -18,15 +18,14 @@ class Load_by_requireSpec {
     });
 
     await registry.rebuild();
-    expect(registry.modules()).to.have.length(2);
-
+    expect(registry.modules()).to.have.length(3);
 
     let loader = await registry.loader<RequireLoader,{}>(RequireLoader);
     let obj = {}
     let ret = await loader.invokeHook('boot',obj);
 
-    expect(obj).to.deep.eq({ modul1: true, modul2: true });
-    expect(ret).to.deep.eq([ 'module1', 'module2' ]);
+    expect(obj).to.deep.eq({ modul1: true, modul2: true , modul4:true});
+    expect(ret).to.deep.eq([ 'module1', 'module4' ,'module2']);
 
   }
 
@@ -41,7 +40,7 @@ class Load_by_requireSpec {
     });
 
     await registry.rebuild();
-    expect(registry.modules()).to.have.length(2);
+    expect(registry.modules()).to.have.length(3);
 
     let loader = await registry.loader<RequireLoader,IRequireOptions>(RequireLoader,{
       filter:(m:Module) => {
@@ -69,7 +68,7 @@ class Load_by_requireSpec {
     });
 
     await registry.rebuild();
-    expect(registry.modules()).to.have.length(1);
+    expect(registry.modules()).to.have.length(2);
 
 
     let loader = await registry.loader<RequireLoader,IRequireOptions>(RequireLoader,{

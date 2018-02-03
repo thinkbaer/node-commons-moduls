@@ -20,7 +20,7 @@ class ModulesSpec {
 
     await registry.rebuild();
     let modules = registry.modules();
-    expect(modules).to.have.length(2);
+    expect(modules).to.have.length(3);
   }
 
   @test
@@ -36,7 +36,16 @@ class ModulesSpec {
 
     await registry.rebuild();
     let modules = registry.modules();
-    expect(modules).to.have.length(3);
+
+    let modulNames = _.map(modules, m => m.name);
+    expect(modulNames).to.deep.eq([
+      "module1",
+      "@group/module4",
+      "@ownGroup/module4",
+      "module2",
+      "module3"
+    ]);
+    expect(modules).to.have.length(5);
   }
 
   @test
@@ -55,8 +64,9 @@ class ModulesSpec {
 
     await registry.rebuild();
     let modules = registry.modules();
-    expect(modules).to.have.length(1);
-    expect(modules[0].name).to.eq('module2');
+    let modulNames = _.map(modules, m => m.name);
+    expect(modules).to.have.length(2);
+    expect(modulNames).to.deep.eq(["@group/module4", 'module2']);
     expect((await modules[0].packageJson()).core_module).to.be.true;
 
     registry = new ModuleRegistry({
@@ -72,10 +82,10 @@ class ModulesSpec {
 
     await registry.rebuild();
     modules = registry.modules();
-    expect(modules).to.have.length(1);
-    expect(modules[0].name).to.eq('module3');
+    modulNames = _.map(modules, m => m.name);
+    expect(modules).to.have.length(2);
+    expect(modulNames).to.deep.eq(["@ownGroup/module4", 'module3']);
     expect((await modules[0].packageJson()).own_module).to.be.true;
-
   }
 
 
