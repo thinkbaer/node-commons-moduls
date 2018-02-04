@@ -1,19 +1,24 @@
 import * as _ from 'lodash';
 
 import {Module} from "./Module";
-import {Helper, INpmlsOptions} from "../utils/Helper";
+import {Helper} from "../utils/Helper";
 import {IModuleRegistryOptions} from "./IModuleRegistryOptions";
 import {IModuleLoader} from "../loader/IModuleLoader";
 import {IModuleHandle} from "../loader/IModuleHandle";
 
 import {ClassesLoader, IClassesOptions, IRequireOptions, ISettingsOptions, RequireLoader, SettingsLoader} from "../";
 import {PlatformUtils} from "commons-base";
+import {INpmlsOptions} from "../utils/INpmlsOptions";
 
 
 const DEFAULT: IModuleRegistryOptions = {
+
   paths: [],
-  // skipCheck:[],
+
+  pattern: [],
+
   module: module,
+
   handleErrorOnDuplicate:'skip'
 }
 
@@ -32,6 +37,8 @@ export class ModuleRegistry {
     this._options = options;
     this.paths = options.paths; // Helper.checkPaths(options.paths || []);
     this._options.depth = this._options.depth || 2
+    this._options.pattern.unshift('node_modules');
+    this._options.pattern = _.uniq(this._options.pattern);
   }
 
 
@@ -76,7 +83,8 @@ export class ModuleRegistry {
   private async _scan_module_path(node_modules_dir: string): Promise<Module[]> {
     let options: INpmlsOptions = {
       filter: this._options.packageFilter,
-      depth: this._options.depth
+      depth: this._options.depth,
+      subModulePaths:this._options.pattern
     };
 
     let packageJsons = [];

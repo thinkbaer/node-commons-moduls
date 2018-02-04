@@ -2,7 +2,15 @@ export interface IModuleRegistryOptions {
 
   packageFilter?: (packageJson: any) => boolean;
 
+  /**
+   * Paths to begin lookup for modules
+   */
   paths: string[]
+
+  /**
+   * Path pattern to look for futher modules, fix pattern is the "node_modules" directory
+   */
+  pattern?: string[]
 
   //skipCheck: string[]
 

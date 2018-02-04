@@ -1,5 +1,6 @@
 import * as path from 'path';
 import {Helper} from "../utils/Helper";
+import {ISubModule} from "./ISubModule";
 
 export class Module {
 
@@ -24,6 +25,7 @@ export class Module {
 
   main: string;
 
+  sub_modules: { [subpath: string]: ISubModule } = {}
 
 
   constructor() {
@@ -51,6 +53,7 @@ export class Module {
     m.internal = !/(\/|\\)node_modules(\/|\\)/.test(m.path);
     m.dependencies = options.dependencies || {};
     m.child_modules = options.child_modules || [];
+    m.sub_modules = options.sub_modules || {};
     return m; //merge(m,options)
   }
 

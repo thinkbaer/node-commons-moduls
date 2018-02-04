@@ -88,6 +88,34 @@ class ModulesSpec {
     expect((await modules[0].packageJson()).own_module).to.be.true;
   }
 
+  @test
+  async 'find modules in directories declared by pattern'() {
+
+    let registry = new ModuleRegistry({
+      paths: [
+        './test/functional/fake_scenario/fake_app_01'
+      ],
+      pattern: ['own_modules'],
+      module: module
+    });
+
+    await registry.rebuild();
+    let modules = registry.modules();
+    let modulNames = _.map(modules, m => m.name);
+    expect(modules).to.have.length(7);
+    expect(modulNames).to.deep.eq([
+      "module1",
+      "own_module7",
+      "@group/module4",
+      "@ownGroup/module4",
+      "module2",
+      "module3",
+      "fake_app_01"
+    ]);
+
+
+  }
+
 
   @test
   async 'find direct module'() {
