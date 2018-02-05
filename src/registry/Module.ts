@@ -27,6 +27,8 @@ export class Module {
 
   sub_modules: { [subpath: string]: ISubModule } = {}
 
+  submodule:boolean = false;
+
 
   constructor() {
     this.name = null;

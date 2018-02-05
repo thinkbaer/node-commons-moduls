@@ -19,7 +19,7 @@ const DEFAULT: IModuleRegistryOptions = {
 
   module: module,
 
-  handleErrorOnDuplicate:'skip'
+  handleErrorOnDuplicate: 'skip'
 }
 
 export class ModuleRegistry {
@@ -84,7 +84,7 @@ export class ModuleRegistry {
     let options: INpmlsOptions = {
       filter: this._options.packageFilter,
       depth: this._options.depth,
-      subModulePaths:this._options.pattern
+      subModulePaths: this._options.pattern
     };
 
     let packageJsons = [];
@@ -92,8 +92,8 @@ export class ModuleRegistry {
       options.depth++;
       let dirname = PlatformUtils.dirname(node_modules_dir);
       let basename = PlatformUtils.basename(node_modules_dir);
-        // TODO!!!!
-      packageJsons = await Helper.lookupNpmInDirectory(dirname,basename,[], options);
+      // TODO!!!!
+      packageJsons = await Helper.lookupNpmInDirectory(dirname, basename, [], options);
     } else {
       packageJsons = await Helper.npmls(node_modules_dir, options);
     }
@@ -108,7 +108,12 @@ export class ModuleRegistry {
     this._modules = modules;
 
     for (let _modul of this._modules) {
-      let dependencies = Object.keys(_modul.dependencies);
+      let dependencies = Object.keys(_modul.dependencies)
+      let submoduls:string[] = [];
+      _.map(_.values(_modul.sub_modules), v => {
+        submoduls.push(...v.modules)
+      });
+
       let children = _.filter(this._modules, function (_x) {
         return dependencies.indexOf(_x.name) > -1
       });
@@ -117,6 +122,13 @@ export class ModuleRegistry {
         _modul.child_modules.push(_dep_modul.name)
       }
       _modul.child_modules = _.uniq(_modul.child_modules);
+
+      let submodules = _.filter(this._modules, (_x) => {
+        return submoduls.indexOf(_x.name) > -1
+      });
+
+      submodules.forEach((m) => {m.submodule = true;})
+
     }
 
     this._modules.sort((a: Module, b: Module) => {
@@ -160,15 +172,15 @@ export class ModuleRegistry {
     return instance;
   }
 
-  async createRequireLoader(options?:IRequireOptions):Promise<RequireLoader>{
-    return this.loader<RequireLoader,IRequireOptions>(RequireLoader,options)
+  async createRequireLoader(options?: IRequireOptions): Promise<RequireLoader> {
+    return this.loader<RequireLoader, IRequireOptions>(RequireLoader, options)
   }
 
-  async createClassesLoader(options?:IClassesOptions):Promise<ClassesLoader>{
-    return this.loader<ClassesLoader,IClassesOptions>(ClassesLoader,options)
+  async createClassesLoader(options?: IClassesOptions): Promise<ClassesLoader> {
+    return this.loader<ClassesLoader, IClassesOptions>(ClassesLoader, options)
   }
 
-  async createSettingsLoader(options?:ISettingsOptions):Promise<SettingsLoader>{
-    return this.loader<SettingsLoader,ISettingsOptions>(SettingsLoader,options)
+  async createSettingsLoader(options?: ISettingsOptions): Promise<SettingsLoader> {
+    return this.loader<SettingsLoader, ISettingsOptions>(SettingsLoader, options)
   }
 }
