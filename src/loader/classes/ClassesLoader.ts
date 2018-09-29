@@ -1,4 +1,4 @@
-import * as _ from 'lodash';
+import * as _ from "lodash";
 import * as glob from "glob";
 
 import {IModuleLoader} from "../IModuleLoader";
@@ -25,6 +25,22 @@ export class ClassesLoader extends IModuleLoader<ClassesHandle, IClassesOptions>
     return classes;
   }
 
+  getClassesWithFilter(topic: string, excludeFilter?: (className: string, modulName: string) => boolean): Function[] {
+    let classes: Function[] = [];
+    for (let handle of this.handles()) {
+      let cls = handle.getClasses(topic);
+      if (!_.isEmpty(cls)) {
+        cls.forEach(c => {
+          const className = ClassLoader.getClassName(c);
+          if (excludeFilter && excludeFilter(className, handle.module.name)) {
+            return;
+          }
+          classes.push(c);
+        })
+      }
+    }
+    return classes;
+  }
 
   getClassesByModule(topic: string): { [modul: string]: Function[] } {
     let classes: { [modul: string]: Function[] } = {};
@@ -94,6 +110,7 @@ export class ClassesLoader extends IModuleLoader<ClassesHandle, IClassesOptions>
       return cls[MODULE_NAME] ? cls[MODULE_NAME] : null;
     }
   }
+
 
 
 }

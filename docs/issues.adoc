@@ -1,6 +1,6 @@
 == Issues
 
-*@TASK {counter:task} 20171107* +
+*@ISSUE {counter:issuetask} 20171107* +
 Create an API for usage of different modul loading and integration methods.
 Current require of NodeModule is fixed coded. But we also want to use declarative
 definitions, without automatically loading.
@@ -9,3 +9,15 @@ Example other loader:
 * RequireLoader - loads by require
 * ClassLoader - loads classes in files of a directory
 * DeclarationLoader - load definitions
+
+
+*@ISSUE {counter:issuetask} 20180213*
+
+Add version check support. Rewrite Module for multiple
+versions
+
+```js
+class Module {
+  versions: {version, path, id(name@version)}
+}
+```
