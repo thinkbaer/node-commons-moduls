@@ -107,7 +107,7 @@ export class Helper {
     }
 
     let package_json = await this.getPackageJson(_path);
-    let modul_exists = _.find(modules, {name: directory});
+    let modul_exists = _.find(modules, x => x.name == directory);
 
     if (modul_exists) return;
 
@@ -159,7 +159,7 @@ export class Helper {
       try {
         let stat = await this.stat(_new_node_module_dir);
         if (stat && stat.isDirectory()) {
-          let _modules = await  this.npmls(_new_node_module_dir, options);
+          let _modules = await this.npmls(_new_node_module_dir, options);
           info.has_modules = true;
           for (let _x of _modules) {
             info.child_modules.push(_x.name);
