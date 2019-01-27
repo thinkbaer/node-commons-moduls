@@ -4,9 +4,22 @@ import * as _ from 'lodash';
 import {PlatformUtils} from "commons-base";
 import {INpmlsOptions} from "./INpmlsOptions";
 import {ISubModule} from "../registry/ISubModule";
+import * as glob from "glob";
 
 
 export class Helper {
+
+  static glob(lib_path: string): Promise<string[]> {
+    return new Promise((resolve, reject) => {
+      glob(lib_path, ((err, matches:string[]) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(matches);
+        }
+      }));
+    })
+  }
 
   static readFile(file: string): Promise<Buffer> {
     return new Promise((resolve, reject) => {

@@ -7,6 +7,7 @@ import {Module} from "../../registry/Module";
 import {ClassesHandle} from "./ClassesHandle";
 import {IClassesOptions} from "./IClassesOptions";
 import {ClassLoader, PlatformUtils} from "commons-base";
+import {Helper} from "../../utils/Helper";
 
 
 const MODULE_NAME = '__MODULNAME__';
@@ -61,7 +62,8 @@ export class ClassesLoader extends IModuleLoader<ClassesHandle, IClassesOptions>
       let refs = []
       for (let _path of lib.refs) {
         let lib_path = PlatformUtils.join(modul.path, _path);
-        let res = glob.sync(lib_path);
+        let res = await Helper.glob(lib_path);
+
         if (!_.isEmpty(res)) {
           for (let r of res) {
             if (PlatformUtils.fileExist(r) && PlatformUtils.isDir(r)) {
