@@ -1,5 +1,4 @@
 import * as _ from "lodash";
-import * as glob from "glob";
 
 import {IModuleLoader} from "../IModuleLoader";
 
@@ -81,7 +80,7 @@ export class ClassesLoader extends IModuleLoader<ClassesHandle, IClassesOptions>
       }
 
       if (!_.isEmpty(refs)) {
-        let classes = ClassLoader.importClassesFromAny(refs);
+        let classes = await ClassLoader.importClassesFromAnyAsync(refs);
         if (!_.isEmpty(classes)) {
           if (Reflect && Reflect['getOwnMetadata']) {
             classes.forEach(cls => {
