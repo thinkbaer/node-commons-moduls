@@ -58,7 +58,7 @@
     "glob": "^7.1.6"
   },
   "private": true,
-  "nyc": asd
+  "nyc": {
     "extension": [
       ".ts",
       ".tsx"
