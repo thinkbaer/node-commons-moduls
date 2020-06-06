@@ -1,6 +1,6 @@
 {
   "name": "commons-moduls",
-  "version": "1.1.5",
+  "version": "1.2.0",
   "description": "Commons-moduls handles and manages contextual moduls for complex and itegratable applications. ",
   "main": "index.js",
   "directories": {
@@ -27,34 +27,38 @@
   },
   "homepage": "https://github.com/thinkbaer/node-commons-moduls#readme",
   "devDependencies": {
-    "@types/chai": "^4.1.7",
-    "@types/glob": "^7.1.1",
+    "@allgemein/packaging": "^1.1.0",
+    "@types/chai": "^4.2.11",
+    "@types/glob": "^7.1.2",
     "@types/gulp": "^4.0.6",
-    "@types/lodash": "^4.14.123",
-    "@types/mocha": "^5.2.6",
-    "@types/node": "^11.13.8",
+    "@types/lodash": "^4.14.155",
+    "@types/mocha": "^7.0.2",
+    "@types/node": "^14.0.11",
     "chai": "^4.2.0",
-    "del": "^4.1.1",
-    "gulp": "^4.0.1",
+    "del": "5.1.0",
+    "gulp": "4.0.2",
     "gulp-bump": "^3.1.3",
     "gulp-clean": "^0.4.0",
     "gulp-replace": "^1.0.0",
-    "gulp-shell": "^0.7.0",
+    "gulp-shell": "0.8.0",
     "gulp-sourcemaps": "^2.6.5",
     "gulp-typescript": "^5.0.1",
-    "mocha": "^6.1.4",
+    "mocha": "^7.2.0",
     "mocha-typescript": "^1.1.17",
-    "nyc": "^14.1.0",
-    "ts-node": "^8.1.0",
-    "typescript": "^3.4.5",
-    "typescript-require": "^0.2.10"
+    "nyc": "^15.1.0",
+    "ts-node": "^8.10.2",
+    "typescript": "^3.5.3",
+    "typescript-require": "^0.2.10",
+    "codelyzer": "^5.2.0",
+    "merge-stream": "^2.0.0",
+    "tslint": "^6.1.2"
   },
   "dependencies": {
-    "commons-base": "^1.1.2",
-    "glob": "^7.1.3"
+    "commons-base": "^1.2.2",
+    "glob": "^7.1.6"
   },
   "private": true,
-  "nyc": {
+  "nyc": asd
     "extension": [
       ".ts",
       ".tsx"
