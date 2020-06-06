@@ -1,14 +1,14 @@
 import * as _ from 'lodash';
 
-import {Module} from "./Module";
-import {Helper} from "../utils/Helper";
-import {IModuleRegistryOptions} from "./IModuleRegistryOptions";
-import {IModuleLoader} from "../loader/IModuleLoader";
-import {IModuleHandle} from "../loader/IModuleHandle";
+import {Module} from './Module';
+import {Helper} from '../utils/Helper';
+import {IModuleRegistryOptions} from './IModuleRegistryOptions';
+import {IModuleLoader} from '../loader/IModuleLoader';
+import {IModuleHandle} from '../loader/IModuleHandle';
 
-import {ClassesLoader, IClassesOptions, IRequireOptions, ISettingsOptions, RequireLoader, SettingsLoader} from "../";
-import {PlatformUtils} from "commons-base";
-import {INpmlsOptions} from "../utils/INpmlsOptions";
+import {ClassesLoader, IClassesOptions, IRequireOptions, ISettingsOptions, RequireLoader, SettingsLoader} from '../';
+import {CryptUtils, PlatformUtils} from 'commons-base';
+import {INpmlsOptions} from '../utils/INpmlsOptions';
 
 
 const DEFAULT: IModuleRegistryOptions = {
@@ -20,7 +20,7 @@ const DEFAULT: IModuleRegistryOptions = {
   module: module,
 
   handleErrorOnDuplicate: 'skip'
-}
+};
 
 export class ModuleRegistry {
 
@@ -36,11 +36,25 @@ export class ModuleRegistry {
     this._modules = [];
     this._options = options;
     this.paths = options.paths; // Helper.checkPaths(options.paths || []);
-    this._options.depth = this._options.depth || 2
+    this._options.depth = this._options.depth || 2;
     this._options.pattern.unshift('node_modules');
     this._options.pattern = _.uniq(this._options.pattern);
   }
 
+
+  /**
+   * Check if cache is present
+   */
+  hasCache() {
+    return !!this._options.cache;
+  }
+
+  /**
+   * Return the cache object
+   */
+  getCache() {
+    return this._options.cache;
+  }
 
   options() {
     return this._options;
@@ -59,13 +73,13 @@ export class ModuleRegistry {
 
     for (let __modul of one_list) {
       let _modul = _.find(to_register, function (_x) {
-        return _x.name == __modul.name
+        return _x.name == __modul.name;
       });
 
       if (!_modul) {
-        to_register.push(__modul)
+        to_register.push(__modul);
       } else {
-        _modul.multi_implements = true
+        _modul.multi_implements = true;
         // TODO: if module already exists check version and replace them
       }
     }
@@ -81,26 +95,46 @@ export class ModuleRegistry {
 
 
   private async _scan_module_path(node_modules_dir: string): Promise<Module[]> {
+
+    const cacheKey = [ModuleRegistry.name.toLowerCase(), 'scan_modul_path', CryptUtils.shorthash(node_modules_dir)].join('--');
+    let packageJsons = null;
+    if (this.hasCache()) {
+      try {
+        packageJsons = await this.getCache().get(cacheKey);
+      } catch (e) {
+      }
+    }
+
     let options: INpmlsOptions = {
       filter: this._options.packageFilter,
       depth: this._options.depth,
       subModulePaths: this._options.pattern
     };
 
-    let packageJsons = [];
-    if (PlatformUtils.fileExist(PlatformUtils.join(node_modules_dir, 'package.json'))) {
-      options.depth++;
-      let dirname = PlatformUtils.dirname(node_modules_dir);
-      let basename = PlatformUtils.basename(node_modules_dir);
-      // TODO!!!!
-      packageJsons = await Helper.lookupNpmInDirectory(dirname, basename, [], options);
-    } else {
-      packageJsons = await Helper.npmls(node_modules_dir, options);
+    if (_.isNull(packageJsons)) {
+      packageJsons = [];
+      if (PlatformUtils.fileExist(PlatformUtils.join(node_modules_dir, 'package.json'))) {
+        options.depth++;
+        let dirname = PlatformUtils.dirname(node_modules_dir);
+        let basename = PlatformUtils.basename(node_modules_dir);
+        // TODO!!!!
+        packageJsons = await Helper.lookupNpmInDirectory(dirname, basename, [], options);
+      } else {
+        packageJsons = await Helper.npmls(node_modules_dir, options);
+      }
+
+      if (this.hasCache()) {
+        try {
+          this.getCache().set(cacheKey, packageJsons);
+        } catch (e) {
+
+        }
+      }
     }
 
     return _.map(packageJsons, (module: any) => {
-      return Module.fromOptions(module)
-    })
+      return Module.fromOptions(module);
+    });
   }
 
 
@@ -108,26 +142,28 @@ export class ModuleRegistry {
     this._modules = modules;
 
     for (let _modul of this._modules) {
-      let dependencies = Object.keys(_modul.dependencies)
-      let submoduls:string[] = [];
+      let dependencies = Object.keys(_modul.dependencies);
+      let submoduls: string[] = [];
       _.map(_.values(_modul.sub_modules), v => {
-        submoduls.push(...v.modules)
+        submoduls.push(...v.modules);
       });
 
       let children = _.filter(this._modules, function (_x) {
-        return dependencies.indexOf(_x.name) > -1
+        return dependencies.indexOf(_x.name) > -1;
       });
 
       for (let _dep_modul of children) {
-        _modul.child_modules.push(_dep_modul.name)
+        _modul.child_modules.push(_dep_modul.name);
       }
       _modul.child_modules = _.uniq(_modul.child_modules);
 
       let submodules = _.filter(this._modules, (_x) => {
-        return submoduls.indexOf(_x.name) > -1
+        return submoduls.indexOf(_x.name) > -1;
       });
 
-      submodules.forEach((m) => {m.submodule = true;})
+      submodules.forEach((m) => {
+        m.submodule = true;
+      });
 
     }
 
@@ -141,14 +177,14 @@ export class ModuleRegistry {
         if (other.name == first.name) return false;
 
         if (other.child_modules.indexOf(first.name) > -1) {
-          return true
+          return true;
         }
-        return false
+        return false;
       });
 
       if (dependents.length) {
         for (let x of dependents) {
-          x.weight += (first.weight + 1)
+          x.weight += (first.weight + 1);
         }
       } else {
         // ???
@@ -159,10 +195,10 @@ export class ModuleRegistry {
       if (a.weight === b.weight) {
         return a.name.localeCompare(b.name);
       }
-      return a.weight - b.weight
+      return a.weight - b.weight;
     });
 
-    return this._modules
+    return this._modules;
   }
 
 
@@ -173,14 +209,14 @@ export class ModuleRegistry {
   }
 
   async createRequireLoader(options?: IRequireOptions): Promise<RequireLoader> {
-    return this.loader<RequireLoader, IRequireOptions>(RequireLoader, options)
+    return this.loader<RequireLoader, IRequireOptions>(RequireLoader, options);
   }
 
   async createClassesLoader(options?: IClassesOptions): Promise<ClassesLoader> {
-    return this.loader<ClassesLoader, IClassesOptions>(ClassesLoader, options)
+    return this.loader<ClassesLoader, IClassesOptions>(ClassesLoader, options);
   }
 
   async createSettingsLoader(options?: ISettingsOptions): Promise<SettingsLoader> {
-    return this.loader<SettingsLoader, ISettingsOptions>(SettingsLoader, options)
+    return this.loader<SettingsLoader, ISettingsOptions>(SettingsLoader, options);
   }
 }
