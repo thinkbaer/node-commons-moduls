@@ -1,8 +1,8 @@
 import * as _ from 'lodash';
-import {Module} from "../registry/Module";
-import {IModuleHandle} from "./IModuleHandle";
-import {ModuleRegistry} from "../registry/ModuleRegistry";
-import {IModuleOptions} from "./IModuleOptions";
+import {Module} from '../registry/Module';
+import {IModuleHandle} from './IModuleHandle';
+import {ModuleRegistry} from '../registry/ModuleRegistry';
+import {IModuleOptions} from './IModuleOptions';
 
 export abstract class IModuleLoader<T extends IModuleHandle, OPT extends IModuleOptions> {
 
@@ -14,7 +14,7 @@ export abstract class IModuleLoader<T extends IModuleHandle, OPT extends IModule
 
   constructor(registry: ModuleRegistry, options?: OPT) {
     this.registry = registry;
-    this._options = options || <OPT>{}
+    this._options = options || <OPT>{};
   }
 
   handles(): T[] {
@@ -24,7 +24,7 @@ export abstract class IModuleLoader<T extends IModuleHandle, OPT extends IModule
   add(handle: T) {
     if (handle) {
       let exists = _.find(this._handles, (x) => {
-        return x.module.name === handle.module.name
+        return x.module.name === handle.module.name;
       });
       if (!exists) {
         this._handles.push(handle);
@@ -39,58 +39,43 @@ export abstract class IModuleLoader<T extends IModuleHandle, OPT extends IModule
 
   load(module: Module): Promise<T> ;
   load(modules: Module[]): Promise<T[]> ;
-  async load(modules: Module | Module[]): Promise<T | T[]> {
+  load(modules: Module | Module[]): Promise<T | T[]> {
     if (_.isArray(modules)) {
-      let m = []
+      const promises = [];
       for (let x of modules) {
         if (this._options.filter && !this._options.filter(x)) {
           continue;
         }
-        let y = await this.loadOne(x);
-
-        try {
-          let res = this.add(y);
-          m.push(res);
-        } catch (err) {
-          if (this.registry.options().handleErrorOnDuplicate) {
-            switch (this.registry.options().handleErrorOnDuplicate) {
-              case 'skip':
-                break;
-              case 'log':
-                console.error(err);
-                break;
-              default:
-                throw err;
-            }
-          } else {
-            throw err;
-          }
-        }
+        promises.push(this._loadOne(x));
       }
-      return m;
+      return Promise.all(promises);
     } else {
-      let res = null;
-      let y = await this.loadOne(modules);
-      try {
-        res = this.add(y);
-
-      } catch (err) {
-        if (this.registry.options().handleErrorOnDuplicate) {
-          switch (this.registry.options().handleErrorOnDuplicate) {
-            case 'skip':
-              break;
-            case 'log':
-              console.error(err);
-              break;
-            default:
-              throw err;
-          }
-        } else {
-          throw err;
-        }
-      }
-      return res;
+      return this._loadOne(modules);
     }
+  }
+
+
+  private async _loadOne(modules: Module) {
+    let res = null;
+    let y = await this.loadOne(modules);
+    try {
+      res = this.add(y);
+    } catch (err) {
+      if (this.registry.options().handleErrorOnDuplicate) {
+        switch (this.registry.options().handleErrorOnDuplicate) {
+          case 'skip':
+            break;
+          case 'log':
+            console.error(err);
+            break;
+          default:
+            throw err;
+        }
+      } else {
+        throw err;
+      }
+    }
+    return res;
   }
 
 }

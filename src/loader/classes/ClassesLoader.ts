@@ -1,12 +1,12 @@
-import * as _ from "lodash";
+import * as _ from 'lodash';
 
-import {IModuleLoader} from "../IModuleLoader";
+import {IModuleLoader} from '../IModuleLoader';
 
-import {Module} from "../../registry/Module";
-import {ClassesHandle} from "./ClassesHandle";
-import {IClassesOptions} from "./IClassesOptions";
-import {ClassLoader, PlatformUtils} from "commons-base";
-import {Helper} from "../../utils/Helper";
+import {Module} from '../../registry/Module';
+import {ClassesHandle} from './ClassesHandle';
+import {IClassesOptions} from './IClassesOptions';
+import {ClassLoader, PlatformUtils} from 'commons-base';
+import {Helper} from '../../utils/Helper';
 
 
 const MODULE_NAME = '__MODULNAME__';
@@ -36,7 +36,7 @@ export class ClassesLoader extends IModuleLoader<ClassesHandle, IClassesOptions>
             return;
           }
           classes.push(c);
-        })
+        });
       }
     }
     return classes;
@@ -56,9 +56,9 @@ export class ClassesLoader extends IModuleLoader<ClassesHandle, IClassesOptions>
 
   protected async loadOne(modul: Module): Promise<ClassesHandle> {
     let handle = new ClassesHandle(modul);
-
+    let promises = [];
     for (let lib of this._options.libs) {
-      let refs = []
+      let refs = [];
       for (let _path of lib.refs) {
         let lib_path = PlatformUtils.join(modul.path, _path);
         let res = await Helper.glob(lib_path);
@@ -80,22 +80,31 @@ export class ClassesLoader extends IModuleLoader<ClassesHandle, IClassesOptions>
       }
 
       if (!_.isEmpty(refs)) {
-        let classes = await ClassLoader.importClassesFromAnyAsync(refs);
-        if (!_.isEmpty(classes)) {
-          if (Reflect && Reflect['getOwnMetadata']) {
-            classes.forEach(cls => {
-              Reflect['defineMetadata'](MODULE_NAME, modul.name, cls);
-            });
-          } else {
-            classes.forEach(cls => {
-              cls[MODULE_NAME] = modul.name;
-            });
-          }
-          handle.add(lib.topic, refs, classes);
-        }
+        promises.push(this.loadClasses(handle, refs, modul.name, lib.topic));
       }
     }
+
+    if (promises.length > 0) {
+      await Promise.all(promises);
+    }
     return handle.hasAnyClasses() ? handle : null;
+  }
+
+
+  private async loadClasses(handle: ClassesHandle, refs: string[], modulName: string, topic: string) {
+    let classes = await ClassLoader.importClassesFromAnyAsync(refs);
+    if (!_.isEmpty(classes)) {
+      if (Reflect && Reflect['getOwnMetadata']) {
+        classes.forEach(cls => {
+          Reflect['defineMetadata'](MODULE_NAME, modulName, cls);
+        });
+      } else {
+        classes.forEach(cls => {
+          cls[MODULE_NAME] = modulName;
+        });
+      }
+      handle.add(topic, refs, classes);
+    }
   }
 
 
@@ -111,7 +120,6 @@ export class ClassesLoader extends IModuleLoader<ClassesHandle, IClassesOptions>
       return cls[MODULE_NAME] ? cls[MODULE_NAME] : null;
     }
   }
-
 
 
 }
