@@ -1,9 +1,8 @@
-import {suite, test} from "mocha-typescript";
-import {expect} from "chai";
-import {ModuleRegistry} from "../../src/registry/ModuleRegistry";
-import {RequireLoader} from "../../src/loader/require/RequireLoader";
-import {ClassesLoader} from "../../src/loader/classes/ClassesLoader";
-import {IClassesOptions} from "../../src/loader/classes/IClassesOptions";
+import {suite, test} from 'mocha-typescript';
+import {expect} from 'chai';
+import {ModuleRegistry} from '../../src/registry/ModuleRegistry';
+import {ClassesLoader} from '../../src/loader/classes/ClassesLoader';
+import {IClassesOptions} from '../../src/loader/classes/IClassesOptions';
 
 
 let registry: ModuleRegistry;
@@ -39,8 +38,7 @@ class Load_of_classesSpec {
 
     let classes = loader.getClasses('generic');
     expect(classes).to.have.length(2);
-    expect(classes[0].prototype.constructor.name).to.eq('KlassM3');
-    expect(classes[1].prototype.constructor.name).to.eq('KlassM4');
+    expect(classes.map(x => x.prototype.constructor.name).sort()).to.be.deep.eq(['KlassM3', 'KlassM4']);
 
     let commandClasses = loader.getClasses('commands');
     expect(commandClasses).to.have.length(1);
