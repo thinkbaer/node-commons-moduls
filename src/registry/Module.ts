@@ -1,6 +1,6 @@
 import * as path from 'path';
-import {Helper} from "../utils/Helper";
-import {ISubModule} from "./ISubModule";
+import {Helper} from '../utils/Helper';
+import {ISubModule} from './ISubModule';
 
 export class Module {
 
@@ -14,6 +14,8 @@ export class Module {
 
   dependencies: any = {};
 
+  peerDependencies: any = {};
+
   child_modules: string[] = [];
 
   /**
@@ -25,9 +27,9 @@ export class Module {
 
   main: string;
 
-  sub_modules: { [subpath: string]: ISubModule } = {}
+  sub_modules: { [subpath: string]: ISubModule } = {};
 
-  submodule:boolean = false;
+  submodule: boolean = false;
 
 
   constructor() {
@@ -36,14 +38,13 @@ export class Module {
     this.path = null;
     this.weight = 0;
     this.dependencies = {};
+    this.peerDependencies = {};
     this.child_modules = [];
-    //  this.uses_hooks = [];
-    //  this.exposes_hooks = []
   }
 
 
   packageJson(): Promise<any> {
-    return Helper.getPackageJson(this.path)
+    return Helper.getPackageJson(this.path);
   }
 
   static fromOptions(options: any): Module {
@@ -54,15 +55,16 @@ export class Module {
     m.main = options.main || null;
     m.internal = !/(\/|\\)node_modules(\/|\\)/.test(m.path);
     m.dependencies = options.dependencies || {};
+    m.peerDependencies = options.peerDependencies || {};
     m.child_modules = options.child_modules || [];
     m.sub_modules = options.sub_modules || {};
     return m; //merge(m,options)
   }
 
   getMain(): string {
-    let chain = [this.path]
+    let chain = [this.path];
     if (this.main) {
-      chain.push(this.main.replace(/.\w+$/, ''))
+      chain.push(this.main.replace(/.\w+$/, ''));
     }
     return path.join(...chain);
   }

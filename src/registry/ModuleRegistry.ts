@@ -142,7 +142,7 @@ export class ModuleRegistry {
     this._modules = modules;
 
     for (let _modul of this._modules) {
-      let dependencies = Object.keys(_modul.dependencies);
+      let dependencies = _.concat([], Object.keys(_modul.dependencies), Object.keys(_modul.peerDependencies));
       let submoduls: string[] = [];
       _.map(_.values(_modul.sub_modules), v => {
         submoduls.push(...v.modules);
