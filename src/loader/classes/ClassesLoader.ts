@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 
-import {IModuleLoader} from '../IModuleLoader';
+import {AbstractModuleLoader} from '../AbstractModuleLoader';
 
 import {Module} from '../../registry/Module';
 import {ClassesHandle} from './ClassesHandle';
@@ -11,7 +11,7 @@ import {Helper} from '../../utils/Helper';
 
 const MODULE_NAME = '__MODULNAME__';
 
-export class ClassesLoader extends IModuleLoader<ClassesHandle, IClassesOptions> {
+export class ClassesLoader extends AbstractModuleLoader<ClassesHandle, IClassesOptions> {
 
 
   getClasses(topic: string): Function[] {

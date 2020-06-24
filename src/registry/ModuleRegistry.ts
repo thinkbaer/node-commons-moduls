@@ -3,8 +3,8 @@ import * as _ from 'lodash';
 import {Module} from './Module';
 import {Helper} from '../utils/Helper';
 import {IModuleRegistryOptions} from './IModuleRegistryOptions';
-import {IModuleLoader} from '../loader/IModuleLoader';
-import {IModuleHandle} from '../loader/IModuleHandle';
+import {AbstractModuleLoader} from '../loader/AbstractModuleLoader';
+import {AbstractModuleHandle} from '../loader/AbstractModuleHandle';
 
 import {ClassesLoader, IClassesOptions, IRequireOptions, ISettingsOptions, RequireLoader, SettingsLoader} from '../';
 import {CryptUtils, PlatformUtils} from 'commons-base';
@@ -202,7 +202,7 @@ export class ModuleRegistry {
   }
 
 
-  async loader<T extends IModuleLoader<IModuleHandle, OPT>, OPT>(loaderClazz: Function, options?: OPT): Promise<T> {
+  async loader<T extends AbstractModuleLoader<AbstractModuleHandle, OPT>, OPT>(loaderClazz: Function, options?: OPT): Promise<T> {
     let instance = <T>Reflect.construct(loaderClazz, [this, options]);
     await instance.load(this.modules());
     return instance;

@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import {IModuleLoader} from "../IModuleLoader";
+import {AbstractModuleLoader} from "../AbstractModuleLoader";
 
 import {Module} from "../../registry/Module";
 import {SettingsHandle} from "./SettingsHandle";
@@ -9,7 +9,7 @@ import {Helper} from "../../utils/Helper";
 import {PlatformUtils} from "commons-base";
 
 
-export class SettingsLoader extends IModuleLoader<SettingsHandle, ISettingsOptions> {
+export class SettingsLoader extends AbstractModuleLoader<SettingsHandle, ISettingsOptions> {
 
 
   getSettings(){

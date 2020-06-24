@@ -1,7 +1,7 @@
 import {Module} from "../registry/Module";
 
 
-export abstract class IModuleHandle {
+export abstract class AbstractModuleHandle {
 
   module: Module;
 

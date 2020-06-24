@@ -1,7 +1,7 @@
-import {IModuleHandle} from "../IModuleHandle";
+import {AbstractModuleHandle} from "../AbstractModuleHandle";
 
 
-export class ClassesHandle extends IModuleHandle {
+export class ClassesHandle extends AbstractModuleHandle {
 
   size: number = 0;
 

@@ -1,7 +1,7 @@
-import {IModuleHandle} from "../IModuleHandle";
+import {AbstractModuleHandle} from "../AbstractModuleHandle";
 
 
-export class SettingsHandle extends IModuleHandle {
+export class SettingsHandle extends AbstractModuleHandle {
 
   settings:any = {};
 

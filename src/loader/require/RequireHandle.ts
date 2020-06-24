@@ -1,7 +1,7 @@
-import {IModuleHandle} from "../IModuleHandle";
+import {AbstractModuleHandle} from "../AbstractModuleHandle";
 
 
-export class RequireHandle extends IModuleHandle {
+export class RequireHandle extends AbstractModuleHandle {
 
   ref: any;
 

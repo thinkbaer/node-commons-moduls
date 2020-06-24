@@ -1,10 +1,10 @@
 import * as _ from 'lodash';
 import {Module} from '../registry/Module';
-import {IModuleHandle} from './IModuleHandle';
+import {AbstractModuleHandle} from './AbstractModuleHandle';
 import {ModuleRegistry} from '../registry/ModuleRegistry';
 import {IModuleOptions} from './IModuleOptions';
 
-export abstract class IModuleLoader<T extends IModuleHandle, OPT extends IModuleOptions> {
+export abstract class AbstractModuleLoader<T extends AbstractModuleHandle, OPT extends IModuleOptions> {
 
   _options: OPT;
 

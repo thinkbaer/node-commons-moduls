@@ -3,8 +3,8 @@ export * from  "./registry/ModuleRegistry";
 export * from  "./registry/IModuleRegistryOptions";
 export * from  "./registry/Module";
 
-export * from  "./loader/IModuleHandle";
-export * from  "./loader/IModuleLoader";
+export * from "./loader/AbstractModuleHandle";
+export * from "./loader/AbstractModuleLoader";
 export * from  "./loader/IModuleOptions";
 
 export * from  "./loader/require/IRequireOptions";

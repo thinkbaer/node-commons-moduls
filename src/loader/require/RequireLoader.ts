@@ -2,7 +2,7 @@ import * as path from "path";
 import * as _ from "lodash";
 
 import {RequireHandle} from "./RequireHandle";
-import {IModuleLoader} from "../IModuleLoader";
+import {AbstractModuleLoader} from "../AbstractModuleLoader";
 
 
 import {Module} from "../../registry/Module";
@@ -12,7 +12,7 @@ import {IRequireOptions} from "./IRequireOptions";
 
 
 
-export class RequireLoader extends IModuleLoader<RequireHandle,IRequireOptions> {
+export class RequireLoader extends AbstractModuleLoader<RequireHandle,IRequireOptions> {
 
 
   protected async loadOne(modul: Module):Promise<RequireHandle> {
