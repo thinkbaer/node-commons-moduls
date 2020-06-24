@@ -1,0 +1,19 @@
+{
+  "name": "fake_app_01",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "hc"
+  ],
+  "author": "Robert Kania",
+  "license": "MIT",
+  "dependencies": {
+    "module7": "0.0.1",
+    "module8": "0.0.1",
+    "module9": "0.0.1"
+  }
+}

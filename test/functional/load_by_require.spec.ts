@@ -2,7 +2,7 @@ import {suite, test} from "mocha-typescript";
 import {expect} from "chai";
 import {ModuleRegistry} from "../../src/registry/ModuleRegistry";
 import {RequireLoader} from "../../src/loader/require/RequireLoader";
-import {IRequireOptions, Module} from "../../src";
+import {IRequireOptions, ModuleDescriptor} from "../../src";
 
 
 @suite('load by require')
@@ -43,7 +43,7 @@ class Load_by_requireSpec {
     expect(registry.modules()).to.have.length(3);
 
     let loader = await registry.loader<RequireLoader,IRequireOptions>(RequireLoader,{
-      filter:(m:Module) => {
+      filter:(m:ModuleDescriptor) => {
         return m.name === 'module1'
       }
     });
@@ -72,7 +72,7 @@ class Load_by_requireSpec {
 
 
     let loader = await registry.loader<RequireLoader,IRequireOptions>(RequireLoader,{
-      filter:(m:Module) => {
+      filter:(m:ModuleDescriptor) => {
         return m.name === 'module3'
       }
     });
