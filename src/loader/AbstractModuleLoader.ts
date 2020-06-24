@@ -29,7 +29,7 @@ export abstract class AbstractModuleLoader<T extends AbstractModuleHandle, OPT e
       if (!exists) {
         this._handles.push(handle);
         // correct order if necessary
-        _.orderBy(this._handles, ['module.weight']);
+        this._handles = _.orderBy(this._handles, ['module.weight']);
       } else {
         throw new Error('handle for module ' + handle.module.name + ' already loaded');
       }
