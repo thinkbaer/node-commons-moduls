@@ -2,7 +2,7 @@ import * as _ from 'lodash';
 
 import {AbstractModuleLoader} from '../AbstractModuleLoader';
 
-import {Module} from '../../registry/Module';
+import {ModuleDescriptor} from '../../registry/ModuleDescriptor';
 import {ClassesHandle} from './ClassesHandle';
 import {IClassesOptions} from './IClassesOptions';
 import {ClassLoader, PlatformUtils} from 'commons-base';
@@ -54,7 +54,7 @@ export class ClassesLoader extends AbstractModuleLoader<ClassesHandle, IClassesO
   }
 
 
-  protected async loadOne(modul: Module): Promise<ClassesHandle> {
+  protected async loadOne(modul: ModuleDescriptor): Promise<ClassesHandle> {
     let handle = new ClassesHandle(modul);
     let promises = [];
     for (let lib of this._options.libs) {

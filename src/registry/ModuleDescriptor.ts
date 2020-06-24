@@ -2,7 +2,7 @@ import * as path from 'path';
 import {Helper} from '../utils/Helper';
 import {ISubModule} from './ISubModule';
 
-export class Module {
+export class ModuleDescriptor {
 
   name: string;
 
@@ -47,8 +47,8 @@ export class Module {
     return Helper.getPackageJson(this.path);
   }
 
-  static fromOptions(options: any): Module {
-    let m = new Module();
+  static fromOptions(options: any): ModuleDescriptor {
+    let m = new ModuleDescriptor();
     m.name = options.name;
     m.version = options.version || null;
     m.path = options.path || null;

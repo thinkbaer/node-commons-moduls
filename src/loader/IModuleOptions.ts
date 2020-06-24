@@ -1,5 +1,5 @@
-import {Module} from "../index";
+import {ModuleDescriptor} from "../index";
 
 export interface IModuleOptions {
-  filter?: (modul:Module) => boolean
+  filter?: (modul:ModuleDescriptor) => boolean
 }

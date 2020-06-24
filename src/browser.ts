@@ -1,7 +1,7 @@
 
 export * from  "./registry/ModuleRegistry";
 export * from  "./registry/IModuleRegistryOptions";
-export * from  "./registry/Module";
+export * from "./registry/ModuleDescriptor";
 
 export * from "./loader/AbstractModuleHandle";
 export * from "./loader/AbstractModuleLoader";

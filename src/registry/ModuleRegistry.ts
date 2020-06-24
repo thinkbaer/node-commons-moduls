@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 
-import {Module} from './Module';
+import {ModuleDescriptor} from './ModuleDescriptor';
 import {Helper} from '../utils/Helper';
 import {IModuleRegistryOptions} from './IModuleRegistryOptions';
 import {AbstractModuleLoader} from '../loader/AbstractModuleLoader';
@@ -26,7 +26,7 @@ export class ModuleRegistry {
 
   private readonly _options: IModuleRegistryOptions;
 
-  private _modules: Module[] = [];
+  private _modules: ModuleDescriptor[] = [];
 
   paths: string[] = [];
 
@@ -89,12 +89,12 @@ export class ModuleRegistry {
     return this;
   }
 
-  modules(): Module[] {
+  modules(): ModuleDescriptor[] {
     return this._modules;
   }
 
 
-  private async _scan_module_path(node_modules_dir: string): Promise<Module[]> {
+  private async _scan_module_path(node_modules_dir: string): Promise<ModuleDescriptor[]> {
 
     const cacheKey = [ModuleRegistry.name.toLowerCase(), 'scan_modul_path', CryptUtils.shorthash(node_modules_dir)].join('--');
     let packageJsons = null;
@@ -133,12 +133,12 @@ export class ModuleRegistry {
     }
 
     return _.map(packageJsons, (module: any) => {
-      return Module.fromOptions(module);
+      return ModuleDescriptor.fromOptions(module);
     });
   }
 
 
-  private _build_registry(modules: Module[]) {
+  private _build_registry(modules: ModuleDescriptor[]) {
     this._modules = modules;
 
     for (let _modul of this._modules) {
@@ -167,7 +167,7 @@ export class ModuleRegistry {
 
     }
 
-    this._modules.sort((a: Module, b: Module) => {
+    this._modules.sort((a: ModuleDescriptor, b: ModuleDescriptor) => {
       return a.child_modules.length - b.child_modules.length;
     });
 

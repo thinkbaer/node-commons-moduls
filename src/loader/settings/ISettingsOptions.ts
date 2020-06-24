@@ -1,4 +1,4 @@
-import {Module} from "../../index";
+import {ModuleDescriptor} from "../../index";
 import {IModuleOptions} from "../IModuleOptions";
 
 export interface ISettingsOptions extends IModuleOptions{

@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import {Module} from '../registry/Module';
+import {ModuleDescriptor} from '../registry/ModuleDescriptor';
 import {AbstractModuleHandle} from './AbstractModuleHandle';
 import {ModuleRegistry} from '../registry/ModuleRegistry';
 import {IModuleOptions} from './IModuleOptions';
@@ -28,6 +28,8 @@ export abstract class AbstractModuleLoader<T extends AbstractModuleHandle, OPT e
       });
       if (!exists) {
         this._handles.push(handle);
+        // correct order if necessary
+        _.orderBy(this._handles, ['module.weight']);
       } else {
         throw new Error('handle for module ' + handle.module.name + ' already loaded');
       }
@@ -35,11 +37,11 @@ export abstract class AbstractModuleLoader<T extends AbstractModuleHandle, OPT e
     return handle;
   }
 
-  protected abstract loadOne(modul: Module): Promise<T>;
+  protected abstract loadOne(modul: ModuleDescriptor): Promise<T>;
 
-  load(module: Module): Promise<T> ;
-  load(modules: Module[]): Promise<T[]> ;
-  load(modules: Module | Module[]): Promise<T | T[]> {
+  load(module: ModuleDescriptor): Promise<T> ;
+  load(modules: ModuleDescriptor[]): Promise<T[]> ;
+  load(modules: ModuleDescriptor | ModuleDescriptor[]): Promise<T | T[]> {
     if (_.isArray(modules)) {
       const promises = [];
       for (let x of modules) {
@@ -55,7 +57,7 @@ export abstract class AbstractModuleLoader<T extends AbstractModuleHandle, OPT e
   }
 
 
-  private async _loadOne(modules: Module) {
+  private async _loadOne(modules: ModuleDescriptor) {
     let res = null;
     let y = await this.loadOne(modules);
     try {

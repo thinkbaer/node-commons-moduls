@@ -1,11 +1,11 @@
-import {Module} from "../registry/Module";
+import {ModuleDescriptor} from "../registry/ModuleDescriptor";
 
 
 export abstract class AbstractModuleHandle {
 
-  module: Module;
+  module: ModuleDescriptor;
 
-  constructor(module: Module){
+  constructor(module: ModuleDescriptor){
     this.module = module;
   }
 

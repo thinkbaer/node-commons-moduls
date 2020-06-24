@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 import {AbstractModuleLoader} from "../AbstractModuleLoader";
 
-import {Module} from "../../registry/Module";
+import {ModuleDescriptor} from "../../registry/ModuleDescriptor";
 import {SettingsHandle} from "./SettingsHandle";
 import {ISettingsOptions} from "./ISettingsOptions";
 
@@ -20,7 +20,7 @@ export class SettingsLoader extends AbstractModuleLoader<SettingsHandle, ISettin
     return settings;
   }
 
-  protected async loadOne(modul: Module): Promise<SettingsHandle> {
+  protected async loadOne(modul: ModuleDescriptor): Promise<SettingsHandle> {
     let handle = null;
     let filepath = PlatformUtils.join(modul.path, this._options.ref);
     let ext = PlatformUtils.pathExtname(filepath, false);

@@ -5,7 +5,7 @@ import {RequireHandle} from "./RequireHandle";
 import {AbstractModuleLoader} from "../AbstractModuleLoader";
 
 
-import {Module} from "../../registry/Module";
+import {ModuleDescriptor} from "../../registry/ModuleDescriptor";
 import {Helper} from "../../utils/Helper";
 import {IRequireOptions} from "./IRequireOptions";
 
@@ -15,7 +15,7 @@ import {IRequireOptions} from "./IRequireOptions";
 export class RequireLoader extends AbstractModuleLoader<RequireHandle,IRequireOptions> {
 
 
-  protected async loadOne(modul: Module):Promise<RequireHandle> {
+  protected async loadOne(modul: ModuleDescriptor):Promise<RequireHandle> {
     let handle = new RequireHandle(modul);
 
     // necassary to extend the search directories of require
