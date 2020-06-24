@@ -1,6 +1,6 @@
 {
   "name": "commons-moduls",
-  "version": "1.2.2",
+  "version": "1.2.1",
   "description": "Commons-moduls handles and manages contextual moduls for complex and itegratable applications. ",
   "main": "index.js",
   "directories": {
@@ -47,8 +47,7 @@
     "mocha-typescript": "^1.1.17",
     "nyc": "^15.1.0",
     "ts-node": "^8.10.2",
-    "typescript": "^3.5.3",
-    "typescript-require": "^0.2.10",
+    "typescript": "3.5.3",
     "codelyzer": "^5.2.0",
     "merge-stream": "^2.0.0",
     "tslint": "^6.1.2"
